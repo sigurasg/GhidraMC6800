@@ -1,6 +1,6 @@
 # GhidraMC6800
 
-A Ghidra extension for the Motorola MC6800 and related MCU.
+A Ghidra extension for the Motorola MC6800 and related MCUs.
 
 ![Disassembly](screenshot.png)
 
