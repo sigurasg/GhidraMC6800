@@ -19,7 +19,7 @@ A Ghidra extension for the Motorola MC6800 and related MCUs.
 1. Start Ghidra
 1. File -> Install Extensions
 1. Press the plus icon ("Add extension")
-1. Choose the built or downloaded GhidraBoy zip file
+1. Choose the built or downloaded GhidraMC6800 zip file
 1. Restart Ghidra when prompted to load the extension properly
 
 ## How to build
@@ -32,7 +32,6 @@ In a new terminal window type
 ```
 ./gradlew
 ```
-
 
 ### Otherwise
 
