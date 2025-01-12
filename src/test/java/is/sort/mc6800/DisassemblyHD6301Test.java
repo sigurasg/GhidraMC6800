@@ -68,7 +68,7 @@ public class DisassemblyHD6301Test extends DisassemblyMC6801CommonTest {
 
 		assertInvalidOpcode(0x1C);
 		assertInvalidOpcode(0x1D);
-		assertInvalidOpcode(0x14);
+		assertInvalidOpcode(0x1E);
 		assertInvalidOpcode(0x1F);
 
 		assertInvalidOpcode(0x41);
