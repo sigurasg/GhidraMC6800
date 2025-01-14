@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import generic.test.AbstractGenericTest;
 import ghidra.app.util.opinion.Loader;
 
-public class MC6800LoaderTest extends AbstractGenericTest {
+public class MC6800LoaderTest {
 	public MC6800LoaderTest() {
 	}
 

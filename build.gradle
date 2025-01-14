@@ -1,4 +1,4 @@
-/* ###
+ea/* ###
  * IP: GHIDRA
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -60,16 +60,24 @@ dependencies {
     testRuntimeOnly('org.junit.vintage:junit-vintage-engine')
 }
 
+
+task copySleighSources(type: Sync) {
+    from 'data'
+    into 'build/data'
+}
+
 task compileSleigh(type: JavaExec) {
     description = 'Run sleigh on the MC6800 languages specs.'
 
+    dependsOn(copySleighSources)
+
     // TODO(siggi): This wants to be a pattern replacement of some kind?
     FileCollection slaFiles = files(
-        'data/languages/mc6800.sla',
-        'data/languages/mc6801.sla',
-        'data/languages/hd6301.sla')
+        'build/data/languages/mc6800.sla',
+        'build/data/languages/mc6801.sla',
+        'build/data/languages/hd6301.sla')
 
-    inputs.files(fileTree('data/languages').include('*.slaspec', '*.sinc'))
+    inputs.files(fileTree('build/data/languages').include('*.slaspec', '*.sinc'))
         .withPropertyName('sourceFiles')
         .withPathSensitivity(PathSensitivity.RELATIVE)
     outputs.files(slaFiles)
@@ -80,14 +88,7 @@ task compileSleigh(type: JavaExec) {
         fileTree("$ghidraInstallDir/Ghidra/Framework") { include('**/*.jar') } +
         fileTree("$ghidraInstallDir/Ghidra/Features") { include('**/*.jar') }
 
-    args = ['-u', '-l', '-n', '-t', '-e', '-c', '-f', '-o', '-s', '-a', 'data/languages']
-}
-
-task copySleighSources(type: Sync) {
-    from 'data'
-    into 'build/data'
-
-    dependsOn(compileSleigh)
+    args = ['-u', '-l', '-n', '-t', '-e', '-c', '-f', '-o', '-s', '-a', 'build/data/languages']
 }
 
 tasks.named('buildExtension') {
@@ -101,7 +102,7 @@ tasks.named('buildExtension') {
 tasks.named('test') {
     useJUnitPlatform()
 
-    dependsOn(copySleighSources)
+    dependsOn(compileSleigh)
 }
 
 tasks.withType(JavaCompile) {
