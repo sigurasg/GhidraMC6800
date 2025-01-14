@@ -1,4 +1,4 @@
-// Copyright 2022 Sigurdur Asgeirsson <siggi@sort.is>
+// Copyright 2025 Sigurdur Asgeirsson <siggi@sort.is>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,15 +26,15 @@ public class MC6800LoaderTest {
 	public MC6800LoaderTest() {
 	}
 
-    @Test
-    public void testGetName() {
-        assertTrue("MC6800".equals(loader.getName()));
-    }
+	@Test
+	public void testGetName() {
+		assertTrue("MC6800".equals(loader.getName()));
+	}
 
-    @BeforeEach
-    public void beforeEach() {
-        loader = new MC6800Loader();
-    }
-    
-    private Loader loader;
+	@BeforeEach
+	public void beforeEach() {
+		loader = new MC6800Loader();
+	}
+	
+	private Loader loader;
 }
