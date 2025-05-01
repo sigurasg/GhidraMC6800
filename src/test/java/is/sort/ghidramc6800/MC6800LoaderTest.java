@@ -14,12 +14,17 @@
 
 package is.sort.ghidramc6800;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.util.Collection;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import generic.test.AbstractGenericTest;
+import ghidra.app.util.opinion.LoadSpec;
 import ghidra.app.util.opinion.Loader;
 
 public class MC6800LoaderTest {
@@ -27,9 +32,16 @@ public class MC6800LoaderTest {
 	}
 
 	@Test
-	public void testGetName() {
+	public void getName() {
 		assertTrue("MC6800".equals(loader.getName()));
 	}
+
+	@Test
+	public void findSupportedLoadSpecs() throws IOException {
+        Collection<LoadSpec> specs = loader.findSupportedLoadSpecs(null);
+
+        assertEquals(specs.size(), 3);
+    }
 
 	@BeforeEach
 	public void beforeEach() {

@@ -15,6 +15,7 @@
 package is.sort.ghidramc6800;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,18 +27,32 @@ import ghidra.app.util.opinion.LoadException;
 import ghidra.app.util.opinion.LoadSpec;
 import ghidra.app.util.opinion.Loaded;
 import ghidra.app.util.opinion.LoaderTier;
+import ghidra.framework.model.DomainObject;
 import ghidra.framework.model.Project;
+import ghidra.program.model.lang.LanguageCompilerSpecPair;
 import ghidra.program.model.listing.Program;
 import ghidra.util.exception.CancelledException;
 import ghidra.util.task.TaskMonitor;
 
 public class MC6800Loader extends AbstractProgramLoader {
+	private static final String OPTION_ADD_MEMORY_BLOCKS = "Add Memory Blocks";
+	private static final String OPTION_ADD_TYPES = "Add Types";
+	private static final String OPTION_MPU_KIND = "MPU";
+
 
 	@Override
 	public Collection<LoadSpec> findSupportedLoadSpecs(ByteProvider arg0) throws IOException {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findSupportedLoadSpecs'");
-	}
+    	List<LoadSpec> loadSpecs = new ArrayList<>();
+        String[] mpus = {"MC6800", "MC6801", "HD6301"};
+		for (String mpu : mpus) {
+			LoadSpec spec = new LoadSpec(this, 0x8000,
+				new LanguageCompilerSpecPair(mpu + ":BE:16:default", "default"), true);
+
+				loadSpecs.add(spec);
+		}
+
+        return loadSpecs;
+    }
 
 	@Override
 	public String getName() {
@@ -52,6 +67,16 @@ public class MC6800Loader extends AbstractProgramLoader {
 	@Override
 	public int getTierPriority() {
 		return 1;
+	}
+
+	@Override
+	public List<Option> getDefaultOptions(ByteProvider provider, LoadSpec loadSpec,
+			DomainObject domainObject, boolean isLoadIntoProgram) {
+		List<Option> options = super.getDefaultOptions(provider, loadSpec, domainObject, isLoadIntoProgram);
+
+//		options.add(new Option());
+
+		return options;
 	}
 
 	@Override
