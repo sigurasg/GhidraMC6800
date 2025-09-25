@@ -8,7 +8,8 @@ jobs:
     strategy:
       matrix:
         ghidra:
-          - "11.4"
+          - "11.4.2"
+          - "11.4.1"
           - "11.3.2"
           - "11.2.1"
           - "11.1.2"
@@ -47,5 +48,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create --verify-tag --generate-notes --draft "${{ github.ref_name }}"
           gh release upload "${{ github.ref_name }}" GhidraMC6800_Ghidra_*/*_GhidraMC6800.zip
