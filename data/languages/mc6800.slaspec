@@ -700,12 +700,12 @@ macro PushEntireState()
 
 :BGT REL    is op=0x2E; REL
 {
-    if ((Z == 0) & (N == V)) goto REL;
+    if ((Z == 0) && (N == V)) goto REL;
 }
 
 :BLE REL     is op=0x2F; REL
 {
-    if (Z | (N != V)) goto REL;
+    if (Z || (N != V)) goto REL;
 }
 
 ################################################################
