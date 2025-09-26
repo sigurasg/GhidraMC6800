@@ -16,17 +16,7 @@ package is.sort.mc6800;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.junit.jupiter.api.Test;
-
-import db.Transaction;
-import ghidra.app.plugin.assembler.Assembler;
-import ghidra.app.plugin.assembler.Assemblers;
-import ghidra.app.plugin.assembler.AssemblySemanticException;
-import ghidra.app.plugin.assembler.AssemblySyntaxException;
-import ghidra.program.model.address.AddressOverflowException;
-import ghidra.program.model.mem.MemoryAccessException;
 
 public class EmulatorMC6800Test extends AbstractEmulatorTest {
 	public EmulatorMC6800Test() {
@@ -41,7 +31,7 @@ public class EmulatorMC6800Test extends AbstractEmulatorTest {
 		setX(0x0000);
 		setS(0x0800);
 
-		write(0x0000, 0x01);
+		assemble(0x0000, "NOP");
 		stepFrom(0x000);
 
 		assertEquals(getA(), 0x00);
@@ -54,7 +44,7 @@ public class EmulatorMC6800Test extends AbstractEmulatorTest {
 
 	@Test
 	public void CPX() {
-		write(0x0000, 0x8C, 0x12, 0x34);
+		assemble(0x0000, "CPX #0x1234");
 
 		// Test the equals case.
 		setX(0x1234);
@@ -74,19 +64,15 @@ public class EmulatorMC6800Test extends AbstractEmulatorTest {
 
 	@Test
 	public void BGT() throws Exception {
-		Transaction transaction = program.openTransaction("test");
-		Assembler asm = Assemblers.getAssembler(program);
-		asm.assemble(address(0x0100),
+		assemble(0x0100,
 			"CMPA 	#0x10",		// Equals case.
 			"BGT 	0x130");
-		asm.assemble(address(0x0110),
+		assemble(0x0110,
 			"CMPA	#0x20",		// Less-than case.
 			"BGT 	0x130");
-		asm.assemble(address(0x0120),
+		assemble(0x0120,
 			"CMPA	#0x0A",		// Greater-than case.
 			"BGT 	0x130");
-
-		transaction.commit();		
 
 		setA(0x10);
 		stepFrom(0x0100, 2);

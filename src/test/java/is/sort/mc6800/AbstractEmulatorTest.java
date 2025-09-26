@@ -23,9 +23,15 @@ import org.junit.jupiter.api.BeforeEach;
 
 import db.Transaction;
 import ghidra.app.emulator.EmulatorHelper;
+import ghidra.app.plugin.assembler.Assembler;
+import ghidra.app.plugin.assembler.Assemblers;
+import ghidra.app.plugin.assembler.AssemblySemanticException;
+import ghidra.app.plugin.assembler.AssemblySyntaxException;
 import ghidra.pcode.memstate.MemoryFaultHandler;
 import ghidra.program.database.mem.MemoryMapDB;
 import ghidra.program.model.address.Address;
+import ghidra.program.model.address.AddressOverflowException;
+import ghidra.program.model.mem.MemoryAccessException;
 import ghidra.program.model.mem.MemoryBlock;
 import ghidra.util.exception.CancelledException;
 import ghidra.util.task.TaskMonitor;
@@ -57,6 +63,20 @@ public abstract class AbstractEmulatorTest extends AbstractIntegrationTest {
 		public boolean unknownAddress(Address address, boolean write) {
 			return false;
 		}
+	}
+
+	protected void assemble(int addr, String ... code) {
+		Transaction transaction = program.openTransaction("test");
+		Assembler asm = Assemblers.getAssembler(program);
+		try {
+			asm.assemble(address(addr), code);
+		}
+		catch (Exception e) {
+			fail("Assembly failed", e);
+			transaction.abort();
+			return;
+		}
+		transaction.commit();
 	}
 
 	protected void setA(int value) {
