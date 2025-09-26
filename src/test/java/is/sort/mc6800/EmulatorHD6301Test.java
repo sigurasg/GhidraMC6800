@@ -25,10 +25,9 @@ public class EmulatorHD6301Test extends AbstractEmulatorTest {
 
 	@Test
 	public void AIM() {
-		// AIM #0xAA,0x0020
-		write(0x0000, 0x71, 0xAA, 0x20);
-		// AIM #0x55,0x10,X
-		write(0x0003, 0x61, 0x55, 0x10);
+		assemble(0x0000,
+			"AIM #0xAA,0x0020",
+			"AIM #0x55,0x10,X");
 		// Set 0x20 to 0x0F.
 		write(0x0020, 0x0F);
 
@@ -46,10 +45,9 @@ public class EmulatorHD6301Test extends AbstractEmulatorTest {
 
 	@Test
 	public void TIM() {
-		// TIM #0xAA,0x0020
-		write(0x0000, 0x7B, 0xAA, 0x20);
-		// TIM #0xF0,0x10,X
-		write(0x0003, 0x6B, 0xF0, 0x10);
+		assemble(0x0000,
+			"TIM #0xAA,0x0020",
+			"TIM #0xF0,0x10,X");
 		// Set 0x20 to 0x0F.
 		write(0x0020, 0x0F);
 
@@ -67,8 +65,7 @@ public class EmulatorHD6301Test extends AbstractEmulatorTest {
 
 	@Test
 	public void XGDX() {
-		// XGDX
-		write(0x0000, 0x18);
+		assemble(0x0000, "XGDX");
 
 		setCC(0x00);
 		setX(0xCAFE);
@@ -79,5 +76,4 @@ public class EmulatorHD6301Test extends AbstractEmulatorTest {
 		assertEquals(0xCAFE, getD());
 		assertEquals(0x00, getCC());
 	}
-
 }

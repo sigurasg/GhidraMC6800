@@ -25,7 +25,7 @@ public class EmulatorMC6801Test extends AbstractEmulatorTest {
 
 	@Test
 	public void CPX() {
-		write(0x0000, 0x8C, 0x12, 0x34);
+		assemble(0x0000, "CPX #0x1234");
 
 		// Test the equals case.
 		setX(0x1234);
