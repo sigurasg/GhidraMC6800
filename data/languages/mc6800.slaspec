@@ -38,13 +38,15 @@ define register offset=8 size=1 [ CC ];
 #    X: index register
 define register offset=16 size=2 [ PC X S ];
 
-# define status bits: (See also 8051/z80).
-@define C "CC[0,1]" # C: Carry (or borrow) flag
-@define V "CC[1,1]" # V: Overflow flag
-@define Z "CC[2,1]" # Z: Zero result
-@define N "CC[3,1]" # N: Negative result (twos complement)
-@define I "CC[4,1]" # I: IRQ interrupt masked
-@define H "CC[5,1]" # H: Half carry flag
+# Status bits
+define bitrange
+    C=CC[0,1] # C: Carry (or borrow) flag
+    V=CC[1,1] # V: Overflow flag
+    Z=CC[2,1] # Z: Zero result
+    N=CC[3,1] # N: Negative result (twos complement)
+    I=CC[4,1] # I: IRQ interrupt masked
+    H=CC[5,1] # H: Half carry flag
+;
 
 define token opbyte (8)
     op        = (0,7)
@@ -136,15 +138,15 @@ EA2: imm16    is addrMode=3; imm16
 
 macro setNZFlags(result)
 {
-    $(Z) = (result == 0);
-    $(N) = (result s< 0);
+    Z = (result == 0);
+    N = (result s< 0);
 }
 
 macro setHFlag(reg, op)
 {
     local mask = 0x0F; # Low nibble mask
 
-    $(H) = (((reg & mask) + (op & mask)) >> 4) & 1;
+    H = (((reg & mask) + (op & mask)) >> 4) & 1;
 }
 
 # Negate twos complement value in op.
@@ -152,8 +154,8 @@ macro setHFlag(reg, op)
 macro negate(op)
 {
     op = -op;
-    $(V) = (op == 0x80);
-    $(C) = (op != 0);
+    V = (op == 0x80);
+    C = (op != 0);
     setNZFlags(op);
 }
 
@@ -161,32 +163,32 @@ macro negate(op)
 # P-code INT_NEGATE.
 macro complement(op)
 {
-    $(V) = 0;
-    $(C) = 1;
+    V = 0;
+    C = 1;
     op = ~op;
     setNZFlags(op);
 }
 
 macro logicalShiftRight(op)
 {
-    $(C) = op & 1;
+    C = op & 1;
     op = op >> 1;
-    $(Z) = (op == 0);
-    $(N) = 0;
+    Z = (op == 0);
+    N = 0;
 }
 
 macro rotateRightWithCarry(op)
 {
-    local carryOut = $(C) << 7;
-    $(C) = op & 1;
+    local carryOut = C << 7;
+    C = op & 1;
     op = (op s>> 1) | carryOut;
     setNZFlags(op);
 }
 
 macro rotateLeftWithCarry(op)
 {
-    local carryIn = $(C);
-    $(C) = op >> 7;
+    local carryIn = C;
+    C = op >> 7;
     op = (op << 1) | carryIn;
     setNZFlags(op);
 }
@@ -195,51 +197,51 @@ macro rotateLeftWithCarry(op)
 # P-code INT_SRIGHT.
 macro arithmeticShiftRight(op)
 {
-    $(C) = op & 1;
+    C = op & 1;
     op = (op s>> 1);
     setNZFlags(op);
 }
 
 macro logicalShiftLeft(op)
 {
-    $(C) = (op >> 7);
+    C = (op >> 7);
     op = op << 1;
-    $(Z) = (op == 0);
-    $(N) = (op >> 7);
+    Z = (op == 0);
+    N = (op >> 7);
 }
 
 macro increment(op)
 {
-    $(V) = (op == 0x7F);
+    V = (op == 0x7F);
     op = op + 1;
     setNZFlags(op);
 }
 
 macro decrement(op)
 {
-    $(V) = (op == 0x80);
+    V = (op == 0x80);
     op = op - 1;
     setNZFlags(op);
 }
 
 macro test(op)
 {
-    $(V) = 0;
+    V = 0;
     setNZFlags(op);
 }
 
 macro clear(op)
 {
-    $(V) = 0;
+    V = 0;
     op = 0;
-    $(Z) = 1;
-    $(N) = 0;
+    Z = 1;
+    N = 0;
 }
 
 macro addition(reg, op)
 {
-    $(C) = carry(reg, op);
-    $(V) = scarry(reg, op);
+    C = carry(reg, op);
+    V = scarry(reg, op);
 
     reg = reg + op;
 
@@ -248,13 +250,13 @@ macro addition(reg, op)
 
 macro additionWithCarry(reg, op)
 {
-    local carryIn = $(C);
+    local carryIn = C;
     local mask = 0x0F; # Low nibble mask
     local tmpResult = reg + op;
 
-    $(H) = (((reg & mask) + (op & mask) + carryIn) >> 4) & 1;
-    $(C) = carry(reg, op) || carry(tmpResult, carryIn);
-    $(V) = scarry(reg, op) ^^ scarry(tmpResult, carryIn);
+    H = (((reg & mask) + (op & mask) + carryIn) >> 4) & 1;
+    C = carry(reg, op) || carry(tmpResult, carryIn);
+    V = scarry(reg, op) ^^ scarry(tmpResult, carryIn);
 
     reg = tmpResult + carryIn;
 
@@ -263,19 +265,19 @@ macro additionWithCarry(reg, op)
 
 macro subtraction(reg, op)
 {
-    $(V) = sborrow(reg, op);
-    $(C) = (reg < op);
+    V = sborrow(reg, op);
+    C = (reg < op);
     reg = reg - op;
     setNZFlags(reg);
 }
 
 macro subtractionWithCarry(reg, op)
 {
-    local carryIn = $(C);
+    local carryIn = C;
     local tmpResult = reg - op;
 
-    $(C) = (reg < op) || (tmpResult < carryIn);
-    $(V) = sborrow(reg, op) ^^ sborrow(tmpResult, carryIn);
+    C = (reg < op) || (tmpResult < carryIn);
+    V = sborrow(reg, op) ^^ sborrow(tmpResult, carryIn);
 
     reg = tmpResult - carryIn;
 
@@ -284,8 +286,8 @@ macro subtractionWithCarry(reg, op)
 
 macro compare(reg, op)
 {
-    $(V) = sborrow(reg, op);
-    $(C) = (reg < op);
+    V = sborrow(reg, op);
+    C = (reg < op);
     local tmp = reg - op;
     setNZFlags(tmp);
 }
@@ -294,42 +296,42 @@ macro logicalAnd(reg, op)
 {
     reg = reg & op;
     setNZFlags(reg);
-    $(V) = 0;
+    V = 0;
 }
 
 macro logicalOr(reg, op)
 {
     reg = reg | op;
     setNZFlags(reg);
-    $(V) = 0;
+    V = 0;
 }
 
 macro logicalExclusiveOr(reg, op)
 {
     reg = reg ^ op;
     setNZFlags(reg);
-    $(V) = 0;
+    V = 0;
 }
 
 macro bitTest(reg, op)
 {
     local tmp = reg & op;
     setNZFlags(tmp);
-    $(V) = 0;
+    V = 0;
 }
 
 macro loadRegister(reg, op)
 {
     reg = op;
     setNZFlags(reg);
-    $(V) = 0;
+    V = 0;
 }
 
 macro storeRegister(reg, op)
 {
     op = reg;
     setNZFlags(reg);
-    $(V) = 0;
+    V = 0;
 }
 
 # Push 1 byte operand op
@@ -400,43 +402,43 @@ macro PushEntireState()
 :INX    is op=0x08
 {
     X = X + 1;
-    $(Z) = (X == 0);
+    Z = (X == 0);
 }
 
 :DEX    is op=0x09
 {
     X = X - 1;
-    $(Z) = (X == 0);
+    Z = (X == 0);
 }
 
 :CLV    is op=0x0A
 {
-    $(V) = 0;
+    V = 0;
 }
 
 :SEV     is op=0x0B
 {
-    $(V) = 1;
+    V = 1;
 }
 
 :CLC     is op=0x0C
 {
-    $(C) = 0;
+    C = 0;
 }
 
 :SEC     is op=0x0D
 {
-    $(C) = 1;
+    C = 1;
 }
 
 :CLI     is op=0x0E
 {
-    $(I) = 0;
+    I = 0;
 }
 
 :SEI     is op=0x0F
 {
-    $(I) = 1;
+    I = 1;
 }
 
 ################################################################
@@ -590,8 +592,8 @@ macro PushEntireState()
 {
     local highA:1 = A >> 4;
     local lowA:1  = A & 0x0F;
-    local cc1 = ($(C) == 1 | highA > 9 | (highA > 8) & (lowA > 9));
-    local cc2 = ($(H) == 1 | lowA > 9);
+    local cc1 = (C == 1 | highA > 9 | (highA > 8) & (lowA > 9));
+    local cc2 = (H == 1 | lowA > 9);
 
     if ( cc1 & cc2 )
     goto <case1>;
@@ -602,15 +604,15 @@ macro PushEntireState()
     goto <exitDAA>;
 
     <case1>
-    $(C) = carry(A, 0x66);
+    C = carry(A, 0x66);
     A = A + 0x66;
     goto <exitDAA>;
     <case2>
-    $(C) = carry(A, 0x60);
+    C = carry(A, 0x60);
     A = A + 0x60;
     goto <exitDAA>;
     <case3>
-    $(C) = carry(A, 0x06);
+    C = carry(A, 0x06);
     A = A + 0x06;
     goto <exitDAA>;
 
@@ -634,13 +636,13 @@ macro PushEntireState()
 
 :BHI REL    is op=0x22; REL
 {
-    local tmp = $(C) + $(Z);
+    local tmp = C + Z;
     if (tmp == 0) goto REL;
 }
 
 :BLS REL    is op=0x23; REL
 {
-    local tmp = $(C) + $(Z);
+    local tmp = C + Z;
     if (tmp) goto REL;
 }
 
@@ -648,66 +650,66 @@ macro PushEntireState()
 
 :BCC REL    is op=0x24; REL
 {
-    if ($(C) == 0) goto REL;
+    if (C == 0) goto REL;
 }
 
 #:BLO REL    is op=0x25; REL # see BCS
 
 :BCS REL    is op=0x25; REL
 {
-    if ($(C)) goto REL;
+    if (C) goto REL;
 }
 
 :BNE REL     is op=0x26; REL
 {
-    if ($(Z) == 0) goto REL;
+    if (Z == 0) goto REL;
 }
 
 :BEQ REL    is op=0x27; REL
 {
-    if ($(Z)) goto REL;
+    if (Z) goto REL;
 }
 
 :BVC REL    is op=0x28; REL
 {
-    if ($(V) == 0) goto REL;
+    if (V == 0) goto REL;
 }
 
 :BVS REL    is op=0x29; REL
 {
-    if ($(V)) goto REL;
+    if (V) goto REL;
 }
 
 :BPL REL    is op=0x2A; REL
 {
-    if ($(N) == 0) goto REL;
+    if (N == 0) goto REL;
 }
 
 :BMI REL    is op=0x2B; REL
 {
-    if ($(N)) goto REL;
+    if (N) goto REL;
 }
 
 :BGE REL    is op=0x2C; REL
 {
-    if ($(N) == $(V)) goto REL;
+    if (N == V) goto REL;
 }
 
 :BLT REL    is op=0x2D; REL
 {
-    local tmp = $(C) ^ $(Z);
+    local tmp = C ^ Z;
     if (tmp) goto REL;
 }
 
 :BGT REL    is op=0x2E; REL
 {
-    if (($(Z) == 0) & ($(N) == $(V))) goto REL;
+    if ((Z == 0) & (N == V)) goto REL;
 }
 
 :BLE REL     is op=0x2F; REL
 {
-    local tmp = $(N) ^ $(V);
-    if (tmp | $(Z)) goto REL;
+    local tmp = N ^ V;
+    if (tmp | Z) goto REL;
 }
 
 ################################################################
@@ -780,7 +782,7 @@ macro PushEntireState()
 :SWI    is op=0x3F
 {
     PushEntireState();
-    $(I) = 1;
+    I = 1;
     tmp:2 = $(SWI_VECTOR);
     call[tmp];
 }
@@ -914,7 +916,7 @@ macro PushEntireState()
     compare(X, OP2);
 @else
     # Can't use the compare macro here because there is no carry.
-    $(V) = sborrow(X, OP2);
+    V = sborrow(X, OP2);
     local tmp = X - OP2;
     setNZFlags(tmp);
 @endif
