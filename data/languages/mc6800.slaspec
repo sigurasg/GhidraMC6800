@@ -697,8 +697,7 @@ macro PushEntireState()
 
 :BLT REL    is op=0x2D; REL
 {
-    local tmp = C ^ Z;
-    if (tmp) goto REL;
+    if (C ^ Z) goto REL;
 }
 
 :BGT REL    is op=0x2E; REL
@@ -708,8 +707,7 @@ macro PushEntireState()
 
 :BLE REL     is op=0x2F; REL
 {
-    local tmp = N ^ V;
-    if (tmp | Z) goto REL;
+    if ((N ^ V) | Z) goto REL;
 }
 
 ################################################################
