@@ -15,8 +15,18 @@
 package is.sort.mc6800;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
+
+import db.Transaction;
+import ghidra.app.plugin.assembler.Assembler;
+import ghidra.app.plugin.assembler.Assemblers;
+import ghidra.app.plugin.assembler.AssemblySemanticException;
+import ghidra.app.plugin.assembler.AssemblySyntaxException;
+import ghidra.program.model.address.AddressOverflowException;
+import ghidra.program.model.mem.MemoryAccessException;
 
 public class EmulatorMC6800Test extends AbstractEmulatorTest {
 	public EmulatorMC6800Test() {
@@ -60,5 +70,32 @@ public class EmulatorMC6800Test extends AbstractEmulatorTest {
 		setCC(0x00);
 		stepFrom(0x0000);
 		assertEquals(CC.N, getCC());
+	}
+
+	@Test
+	public void BGT() throws Exception {
+		Transaction transaction = program.openTransaction("test");
+		Assembler asm = Assemblers.getAssembler(program);
+		asm.assemble(address(0x0100),
+			"CMPA 	#0x10",		// Equals case.
+			"BGT 	0x130");
+		asm.assemble(address(0x0110),
+			"CMPA	#0x20",		// Less-than case.
+			"BGT 	0x130");
+		asm.assemble(address(0x0120),
+			"CMPA	#0x0A",		// Greater-than case.
+			"BGT 	0x130");
+
+		transaction.commit();		
+
+		setA(0x10);
+		stepFrom(0x0100, 2);
+		assertNotEquals(getPC(), 0x0130);
+
+		stepFrom(0x0110, 2);
+		assertNotEquals(getPC(), 0x0130);
+
+		stepFrom(0x0120, 2);
+		assertEquals(getPC(), 0x0130);
 	}
 }

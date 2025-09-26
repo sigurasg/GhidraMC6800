@@ -24,7 +24,9 @@ import org.junit.jupiter.api.BeforeEach;
 import db.Transaction;
 import ghidra.app.emulator.EmulatorHelper;
 import ghidra.pcode.memstate.MemoryFaultHandler;
+import ghidra.program.database.mem.MemoryMapDB;
 import ghidra.program.model.address.Address;
+import ghidra.program.model.mem.MemoryBlock;
 import ghidra.util.exception.CancelledException;
 import ghidra.util.task.TaskMonitor;
 
@@ -34,7 +36,10 @@ public abstract class AbstractEmulatorTest extends AbstractIntegrationTest {
 		super(lang);
 
 		try (Transaction transaction = program.openTransaction("test")) {
-			program.getMemory().createUninitializedBlock("ram", address(0x0000), 0x10000, false);
+			MemoryMapDB mem = program.getMemory();
+			MemoryBlock block = mem.createUninitializedBlock("ram", address(0x0000), 0x10000, false);
+			mem.convertToInitialized(block, (byte) 0x00);
+
 			transaction.commit();
 		}
 		catch (Exception e) {
@@ -126,14 +131,27 @@ public abstract class AbstractEmulatorTest extends AbstractIntegrationTest {
 		return read(addr, 1)[0];
 	}
 
-	protected void stepFrom(int addr) {
-		setPC(addr);
+	protected void step(int numInstructions) {
 		try {
-			emulator.step(TaskMonitor.DUMMY);
+			for (int i = 0; i < numInstructions; ++i)
+				emulator.step(TaskMonitor.DUMMY);
 		}
 		catch (CancelledException e) {
 			fail("Failed to step.", e);
 		}
+	}
+
+	protected void step() {
+		step(1);
+	}
+
+	protected void stepFrom(int addr, int numInstructions) {
+		setPC(addr);
+		step(numInstructions);
+	}
+
+	protected void stepFrom(int addr) {
+		stepFrom(addr, 1);
 	}
 
 	@BeforeEach
