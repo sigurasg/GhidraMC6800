@@ -63,6 +63,29 @@ public class EmulatorMC6800Test extends AbstractEmulatorTest {
 	}
 
 	@Test
+	public void BLT() throws Exception {
+		assemble(0x0100,
+			"CMPA 	#0x10",		// Equals case.
+			"BLT 	0x130");
+		assemble(0x0110,
+			"CMPA	#0x20",		// Less-than case.
+			"BLT 	0x130");
+		assemble(0x0120,
+			"CMPA	#0x0A",		// Greater-than case.
+			"BLT 	0x130");
+
+		setA(0x10);
+		stepFrom(0x0100, 2);
+		assertNotEquals(getPC(), 0x0130);
+
+		stepFrom(0x0110, 2);
+		assertEquals(getPC(), 0x0130);
+
+		stepFrom(0x0120, 2);
+		assertNotEquals(getPC(), 0x0130);
+	}
+
+	@Test
 	public void BGT() throws Exception {
 		assemble(0x0100,
 			"CMPA 	#0x10",		// Equals case.
@@ -83,5 +106,28 @@ public class EmulatorMC6800Test extends AbstractEmulatorTest {
 
 		stepFrom(0x0120, 2);
 		assertEquals(getPC(), 0x0130);
+	}
+
+	@Test
+	public void BLE() throws Exception {
+		assemble(0x0100,
+			"CMPA 	#0x10",		// Equals case.
+			"BLE 	0x130");
+		assemble(0x0110,
+			"CMPA	#0x20",		// Less-than case.
+			"BLE 	0x130");
+		assemble(0x0120,
+			"CMPA	#0x0A",		// Greater-than case.
+			"BLE 	0x130");
+
+		setA(0x10);
+		stepFrom(0x0100, 2);
+		assertEquals(getPC(), 0x0130);
+
+		stepFrom(0x0110, 2);
+		assertEquals(getPC(), 0x0130);
+
+		stepFrom(0x0120, 2);
+		assertNotEquals(getPC(), 0x0130);
 	}
 }
