@@ -12,7 +12,7 @@ A Ghidra extension for the Motorola MC6800 and related MCUs.
 
   - Motorola MC6800, which also covers Motorola MC6802 and MC6808.
   - Motorola MC6801, which also covers Motorola MC6803 as well as Hitachi HD6803.
-  - Hitachi HD6801, which also covers Hitachi HD6803.
+  - Hitachi HD6301, which also covers Hitachi HD6303.
 
 ## How to install
 1. Download a [prebuilt GhidraMC6800 release](https://github.com/sigurasg/GhidraMC6800/releases), or build it yourself.
