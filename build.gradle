@@ -58,34 +58,47 @@ dependencies {
     testRuntimeOnly('org.junit.vintage:junit-vintage-engine')
 }
 
+task copySleighSources(type: Sync) {
+    from 'data'
+    into 'build/data'
+
+    preserve {
+        include '*.sla'
+    }
+}
+
 task compileSleigh(type: JavaExec) {
     description = 'Run sleigh on the MC6800 languages specs.'
 
-    // TODO(siggi): This wants to be a pattern replacement of some kind?
-    FileCollection slaFiles = files(
-        'data/languages/mc6800.sla',
-        'data/languages/mc6801.sla',
-        'data/languages/hd6301.sla')
+    String buildDir = 'build/data/languages'
+    String inputDir = 'data/languages'
 
-    inputs.files(fileTree('data/languages').include('*.slaspec', '*.sinc'))
+    // Get the input files.
+    FileTree inputFiles = fileTree(inputDir).include('*.slaspec', '*.sinc')
+    ArrayList<File> outputFiles = new ArrayList<File>()
+    // Build the list of output .sla files.
+    inputFiles.forEach(file -> {
+         if (file.getPath().endsWith(".slaspec")) {
+            String slaPath = file.getPath().replace(".slaspec", ".sla")
+            slaPath = slaPath.replace(inputDir, buildDir)
+            outputFiles.add(new File(slaPath))
+         }
+        })
+
+    inputs.files(inputFiles)
         .withPropertyName('sourceFiles')
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    outputs.files(slaFiles)
-        .withPropertyName('outputFile')
+    outputs.files(outputFiles)
+        .withPropertyName('outputFiles')
 
     mainClass.set('ghidra.pcodeCPort.slgh_compile.SleighCompile')
     classpath =
         fileTree("$ghidraInstallDir/Ghidra/Framework") { include('**/*.jar') } +
         fileTree("$ghidraInstallDir/Ghidra/Features") { include('**/*.jar') }
 
-    args = ['-u', '-l', '-n', '-t', '-e', '-c', '-f', '-o', '-s', '-a', 'data/languages']
-}
+    args = ['-u', '-l', '-n', '-t', '-e', '-c', '-f', '-o', '-s', '-a', buildDir]
 
-task copySleighSources(type: Sync) {
-    from 'data'
-    into 'build/data'
-
-    dependsOn(compileSleigh)
+    dependsOn(copySleighSources)
 }
 
 tasks.named('buildExtension') {
@@ -99,7 +112,10 @@ tasks.named('buildExtension') {
 tasks.named('test') {
     useJUnitPlatform()
 
-    dependsOn(copySleighSources)
+    // The tests are dependent on the compiled language files.
+    inputs.files(fileTree('build/data/languages').include('*.sla'))
+
+    dependsOn(compileSleigh)
 }
 
 tasks.withType(JavaCompile) {
@@ -117,7 +133,7 @@ buildExtension {
     exclude 'gradle/**'
     exclude 'eclipse/**'
 
-    dependsOn(copySleighSources)
+    dependsOn(compileSleigh)
 }
 
 // And don't ship the tests.
