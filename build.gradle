@@ -132,6 +132,8 @@ buildExtension {
     exclude '.github/**'
     exclude 'gradle/**'
     exclude 'eclipse/**'
+    exclude 'screenshot.png'
+    exclude 'README.md'
 
     dependsOn(compileSleigh)
 }
