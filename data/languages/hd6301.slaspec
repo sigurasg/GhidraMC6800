@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-@define MC6801 ""
+@define MC6801 "1"
 
 @include "mc6800.sinc"
 @include "mc6801.sinc"
