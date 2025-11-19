@@ -24,6 +24,13 @@ define space register type=register_space size=1;
 define register offset=0 size=1 [ A B ];
 
 @ifdef MC6801
+@define HAS_D_REGISTER "1"
+@define HAS_2_BYTE_JSR_JMP "1"
+@else
+@define HAS_BROKEN_CMPX "1"
+@endif
+
+@ifdef HAS_D_REGISTER
 define register offset=0 size=2 [ D ];
 @endif
 
@@ -112,7 +119,7 @@ OP2: imm16      is addrMode=3; imm16
 }
 
 # 2-byte EA operand for JMP/JSR
-@ifdef MC6801
+@ifdef HAS_2_BYTE_JSR_JMP
 EA2: imm8      is addrMode=1; imm8
 {
     export *:2 imm8;
@@ -906,13 +913,13 @@ macro PushEntireState()
 
 :CPX OP2    is (op=0x8C | op=0x9C | op=0xAC | op=0xBC) ... & OP2
 {
-@ifdef MC6801
-    compare(X, OP2);
-@else
+@ifdef HAS_BROKEN_CMPX
     # Can't use the compare macro here because there is no carry.
     V = sborrow(X, OP2);
     local tmp = X - OP2;
     setNZFlags(tmp);
+@else
+    compare(X, OP2);
 @endif
 }
 
