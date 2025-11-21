@@ -23,12 +23,6 @@ define space register type=register_space size=1;
 # 8-bit registers A, B
 define register offset=0 size=1 [ A B ];
 
-@ifdef MC6801
-@define HAS_D_REGISTER "1"
-@define HAS_2_BYTE_JSR_JMP "1"
-@else
-@define HAS_BROKEN_CMPX "1"
-@endif
 
 @ifdef HAS_D_REGISTER
 define register offset=0 size=2 [ D ];

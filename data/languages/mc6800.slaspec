@@ -12,4 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+@define HAS_BROKEN_CMPX "1"
+
 @include "mc6800.sinc"
