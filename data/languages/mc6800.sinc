@@ -20,24 +20,20 @@ define alignment=1;
 define space RAM     type=ram_space      size=2  default;
 define space register type=register_space size=1;
 
-# 8-bit registers A, B
-define register offset=0 size=1 [ A B ];
-
+# 8-bit registers A, B, CC
+define register offset=0x00 size=1 [ A B CC ];
 
 @ifdef HAS_D_REGISTER
-define register offset=0 size=2 [ D ];
+define register offset=0x00 size=2 [ D ];
 @endif
 
-# 8-bit condition code register
-define register offset=8 size=1 [ CC ];
 # 16-bit registers:
 #    PC: Program counter
 #    S:  Stack pointer
 #    X: IX index register
-#    Y: IY index register
-define register offset=16 size=2 [ PC X S ];
+define register offset=0x10 size=2 [ PC X S ];
 
-# Status bits
+# Status bits in CC.
 define bitrange
     C=CC[0,1] # C: Carry (or borrow) flag
     V=CC[1,1] # V: Overflow flag
