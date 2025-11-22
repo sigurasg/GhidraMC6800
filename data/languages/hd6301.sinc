@@ -1,0 +1,87 @@
+# Copyright 2024 Sigurdur Asgeirsson <siggi@sort.is>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# 1-byte immediate operand.
+IMM1: "#"imm8 is imm8
+{
+    local tmp:1=imm8;
+    export tmp;
+}
+
+# 1-byte displacement operand.
+DISP1: imm8,X  is X; imm8
+{
+    local tmp:2 = imm8 + X;
+    export *:1 tmp;
+}
+# 1-byte memory operand.
+M1: imm8 is imm8
+{
+    export *:1 imm8;
+}
+
+:AIM IMM1, M1    is op=0x71; IMM1; M1
+{
+    logicalAnd(M1, IMM1);
+}
+
+:AIM IMM1, DISP1 is op=0x61; IMM1; DISP1
+{
+    logicalAnd(DISP1, IMM1);
+}
+
+:OIM IMM1, M1    is op=0x72; IMM1; M1
+{
+    logicalOr(M1, IMM1);
+}
+
+:OIM IMM1, DISP1 is op=0x62; IMM1; DISP1
+{
+    logicalOr(DISP1, IMM1);
+}
+
+:EIM IMM1, M1    is op=0x75; IMM1; M1
+{
+    logicalExclusiveOr(M1, IMM1);
+}
+
+:EIM IMM1, DISP1 is op=0x65; IMM1; DISP1
+{
+    logicalExclusiveOr(DISP1, IMM1);
+}
+
+:TIM IMM1, M1    is op=0x7B; IMM1; M1
+{
+    bitTest(M1, IMM1);
+}
+
+:TIM IMM1, DISP1 is op=0x6B; IMM1; DISP1
+{
+    bitTest(DISP1, IMM1);
+}
+
+:XGDX           is op=0x18
+ {
+    local tmp:2=X;
+    X=D;
+    D=tmp;
+ }
+
+:SLP            is op=0x1A
+{
+    # Sleeps the MPU, but for the purposes of analysis,
+    # execution continues after an interrupt, so this looks
+    # like a noop.
+    goto inst_next;
+}

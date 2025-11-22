@@ -12,78 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-@define MC6801 ""
+@define HAS_D_REGISTER "1"
+@define HAS_2_BYTE_JSR_JMP "1"
 
-@include "mc6800.slaspec"
-
-:ABX        is op=0x3A
-{
-    # No effect on flags.
-    X = X + zext(B);
-}
-
-:ADDD OP2   is (op=0xC3 | op=0xD3 | op=0xF3 | op=0xE3) ... & OP2
-{
-    addition(D, OP2);
-}
-
-:ASLD       is op=0x05
-{
-    C = D[15, 1];
-    D = D << 1;
-    Z = (D == 0);
-    N = D[15, 1];
-}
-
-:BRN        is op=0x21
-{
-    # Branch never is an elaborate NOP.
-    goto inst_next;
-}
-
-:JSR EA2    is op=0x9d ... & EA2
-{
-    local addr:2 = inst_next;
-    Push2(S, addr);
-    local target:2 = EA2;
-    call [target];
-}
-
-:LDD OP2    is (op=0xCC | op=0xDC | op=0xFC | op=0xEC) ... & OP2
-{
-    loadRegister(D, OP2);
-}
-
-:LSRD       is op=0x04
-{
-    C = D[0, 1];
-    D = D << 1;
-    Z = (D == 0);
-    N = D[15, 1];
-}
-
-:MUL        is op=0x3D
-{
-    D = zext(A) * zext(B);
-    C = D[15,1];
-}
-
-:PSHX       is op=0x3C
-{
-    Push2(S, X);
-}
-
-:PULX       is op=0x38
-{
-    Pull2(S, X);
-}
-
-:STD OP2    is (op=0xDD | op=0xFD | op=0xED) ... & OP2
-{
-    storeRegister(D, OP2);
-}
-
-:SUBD OP2   is (op=0x83 | op=0x93 | op=0xB3 | op=0xA3) ... & OP2
-{
-    subtraction(D, OP2);
-}
+@include "mc6800.sinc"
+@include "mc6801.sinc"
