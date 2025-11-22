@@ -32,6 +32,7 @@ RUN \
     apt install -y \
             git \
             ssh \
+            openjdk-21-jdk \
             openjdk-21-dbg \
             wget \
             unzip \
