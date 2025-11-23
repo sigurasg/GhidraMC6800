@@ -461,12 +461,14 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		assertDisassemblesTo("STAB 0xa,X", 0xE7, 0x0A);
 	}
 
+	@Test
 	public void STS() {
-		assertDisassemblesTo("STX 0x000a", 0x9F, 0x0A);
-		assertDisassemblesTo("STX 0x1234", 0xBF, 0x12, 0x34);
-		assertDisassemblesTo("STX 0xa,X", 0xAF, 0x0A);
+		assertDisassemblesTo("STS 0x000a", 0x9F, 0x0A);
+		assertDisassemblesTo("STS 0x1234", 0xBF, 0x12, 0x34);
+		assertDisassemblesTo("STS 0xa,X", 0xAF, 0x0A);
 	}
 
+	@Test
 	public void STX() {
 		assertDisassemblesTo("STX 0x000a", 0xDF, 0x0A);
 		assertDisassemblesTo("STX 0x1234", 0xFF, 0x12, 0x34);
