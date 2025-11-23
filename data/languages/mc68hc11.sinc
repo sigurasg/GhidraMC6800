@@ -13,11 +13,90 @@
 # limitations under the License.
 
 
-:^instruction              is op=0x18; instruction  [ is_y_prefix=1; ] {}
+# Parse the prefix for all instructions.
+# TODO(siggi): What's supposed to happen if the instruction doesn't
+#     have an imm,Y addressing mode?
+:^instruction              is op=0x18; instruction  [ is_18_prefix=1; ] {}
 
-# TODO(siggi): All the Y-register instructions.
+# This is used for the CPD/CPX instructions.
+:^instruction              is op=0xCD; instruction  [ is_cd_prefix=1; ] {}
+
+# The 6800 Y specific instructions
+:INY    is op=0x18; op=0x08
+{
+    Y = Y + 1;
+    Z = (Y == 0);
+}
+
+:DEY    is op=0x18; op=0x09
+{
+    Y = Y - 1;
+    Z = (Y == 0);
+}
+
+:TSY    is op=0x18; op=0x30
+{
+    Y = S + 1;
+}
+
+:TYS    is op=0x18; op=0x35
+{
+    S = Y - 1;
+}
+
+:CPY OP2    is is_18_prefix=1 & (op=0x8C | op=0x9C | op=0xAC | op=0xBC) ... & OP2
+{
+    compare(Y, OP2);
+}
+:CPY OP2    is op=0x1A; (op=0x8C | op=0x9C | op=0xAC | op=0xBC) ... & OP2
+{
+    compare(Y, OP2);
+}
+
+:LDY OP2    is is_18_prefix=1 & (op=0xCE | op=0xDE | op=0xEE | op=0xFE)  ... & OP2
+{
+    loadRegister(Y, OP2);
+}
+:LDY OP2    is op=0x1A; (op=0xCE | op=0xDE | op=0xEE | op=0xFE) ... & OP2
+{
+    loadRegister(Y, OP2);
+}
+
+:STY OP2    is is_18_prefix=1 & (op=0xDF | op=0xEF | op=0xFF) ... & OP2
+{
+    storeRegister(Y, OP2);
+}
+:STY OP2    is op=0x1A; (op=0xDF | op=0xEF | op=0xFF) ... & OP2
+{
+    storeRegister(Y, OP2);
+}
+
+# 6801 Y-specific instructions.
 :ABY        is op=0x18; op=0x3A
 {
     # No effect on flags.
     Y = Y + zext(B);
+}
+
+:PSHY       is op=0x18; op=0x3C
+{
+    Push2(S, Y);
+}
+
+:PULY       is op=0x18; op=0x38
+{
+    Pull2(S, Y);
+}
+
+# MC68HC11 specific instructions.
+
+:CPD        is op=0x1A; (op=0x83 | op=0x93 | op=0xB3 | op=0xA3) ... & OP2 {
+    compare(D, OP2);
+}
+:CPD        is is_cd_prefix=1 & (op=0x83 | op=0x93 | op=0xB3 | op=0xA3) ... & OP2 {
+    compare(D, OP2);
+}
+
+:CPX        is is_cd_prefix=1 & (op=0x8C | op=0x9C | op=0xBC | op=0xAC) ... & OP2 {
+    compare(X, OP2);
 }

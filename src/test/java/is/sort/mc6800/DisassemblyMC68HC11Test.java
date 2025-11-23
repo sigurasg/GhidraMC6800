@@ -126,12 +126,6 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 	}
 
 	@Test
-	public void LDX() {
-		super.LDX();
-		assertDisassemblesTo("LDX 0x12,Y", 0x18, 0xEE, 0x12);
-	}
-
-	@Test
 	public void LSR() {
 		super.LSR();
 		assertDisassemblesTo("LSR 0x12,Y", 0x18, 0x64, 0x12);
@@ -183,12 +177,6 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 	}
 	
 	@Test
-	public void STX() {
-		super.STX();
-		assertDisassemblesTo("STX 0xa,Y", 0x18, 0xEF, 0x0A);
-	}
-
-	@Test
 	public void SUB() {
 		super.SUB();
 		assertDisassemblesTo("SUBA 0xa,Y", 0x18, 0xA0, 0x0A);
@@ -226,10 +214,77 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		assertDisassemblesTo("SUBD 0xab,Y", 0x18, 0xA3, 0xAB);
 	}
 
-	// TODO(siggi): Test the Y-register instructions.
-    @Test
+	// The 6800 Y-specific instructions.
+	@Test
+	public void INY() {
+		assertDisassemblesTo("INY", 0x18, 0x08);
+	}
+
+	@Test
+	public void TSY() {
+		assertDisassemblesTo("TSY", 0x18, 0x30);
+	}
+
+	@Test
+	public void TYS() {
+		assertDisassemblesTo("TYS", 0x18, 0x35);
+	}
+
+	@Test
+	public void CPY() {
+		assertDisassemblesTo("CPY #0x1234", 0x18, 0x8C, 0x12, 0x34);
+		assertDisassemblesTo("CPY 0x00ab", 0x18, 0x9C, 0xAB);
+		assertDisassemblesTo("CPY 0x1234", 0x18, 0xBC, 0x12, 0x34);
+		assertDisassemblesTo("CPY 0x12,Y", 0x18, 0xAC, 0x12);
+		assertDisassemblesTo("CPY 0x12,X", 0x1A, 0xAC, 0x12);
+	}
+
+	@Test
+	public void LDY() {
+		assertDisassemblesTo("LDY #0x1234", 0x18, 0xCE, 0x12, 0x34);
+		assertDisassemblesTo("LDY 0x00ab", 0x18, 0xDE, 0xAB);
+		assertDisassemblesTo("LDY 0x1234", 0x18, 0xFE, 0x12, 0x34);
+		assertDisassemblesTo("LDY 0x12,Y", 0x18, 0xEE, 0x12);
+		assertDisassemblesTo("LDY 0x12,X", 0x1A, 0xEE, 0x12);
+	}
+	@Test
+	public void STY() {
+		assertDisassemblesTo("STY 0x000a", 0x18, 0xDF, 0x0A);
+		assertDisassemblesTo("STY 0x1234", 0x18, 0xFF, 0x12, 0x34);
+		assertDisassemblesTo("STY 0xa,Y", 0x18, 0xEF, 0x0A);
+		assertDisassemblesTo("STY 0xa,X", 0x1A, 0xEF, 0x0A);
+	}
+
+	// Test 6801 Y-specific opcodes.
+	@Test
 	public void ABY() {
 		assertDisassemblesTo("ABY", 0x18, 0x3A);
+	}
+
+	@Test
+	public void PSHY() {
+		assertDisassemblesTo("PSHY", 0x18, 0x3C);
+	}
+
+	@Test
+	public void PULX() {
+		assertDisassemblesTo("PULY", 0x18, 0x38);
+	}
+
+	// Test 68HC11 specific instructions.
+	@Test
+	public void CPD() {
+		assertDisassemblesTo("CPD #0x1234", 0x1A, 0x83, 0x12, 0x34);
+		assertDisassemblesTo("CPD 0x00ab", 0x1A, 0x93, 0xAB);
+		assertDisassemblesTo("CPD 0x1234", 0x1A, 0xB3, 0x12, 0x34);
+		assertDisassemblesTo("CPD 0x12,X", 0x1A, 0xA3, 0x12);
+		assertDisassemblesTo("CPD 0x12,Y", 0xCD, 0xA3, 0x12);
+	}
+
+	@Test
+	public void CPX() {
+		super.CPX();
+		assertDisassemblesTo("CPX 0x12,Y", 0xCD, 0xAC, 0x12);
 	}
 
 	@Test
@@ -242,9 +297,12 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		assertInvalidOpcode(0x13);
 		assertInvalidOpcode(0x14);
 		assertInvalidOpcode(0x15);
-		assertInvalidOpcode(0x18);
 
+		// TODO(siggi): Fixme!
+		assertInvalidOpcode(0x18);
 		assertInvalidOpcode(0x1A);
+
+
 		assertInvalidOpcode(0x1C);
 		assertInvalidOpcode(0x1D);
 		assertInvalidOpcode(0x1E);

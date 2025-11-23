@@ -29,7 +29,8 @@ define register offset=0x00 size=2 [ D ];
 
 define register offset=0x20 size=4 contextreg;
 define context contextreg
-       is_y_prefix = (0,1) # Set if the 0x18 instruction prefix was encountered.
+       is_18_prefix = (0,1) # Set if the 0x18 instruction prefix was encountered.
+       is_cd_prefix = (1,1) # Set if the 0xCD instruction prefix was encountered.
 ;
 
 # 16-bit registers:
@@ -88,13 +89,13 @@ OP1: imm8    is addrMode=1; imm8
 {
     export *:1 imm8;
 }
-OP1: imm8,X  is is_y_prefix=0 & addrMode=2 & X; imm8
+OP1: imm8,X  is is_18_prefix=0 & addrMode=2 & X; imm8
 {
     local tmp:2 = imm8 + X;
     export *:1 tmp;
 }
 @ifdef HAS_Y_REGISTER
-OP1: imm8,Y  is is_y_prefix=1 & addrMode=2 & Y; imm8
+OP1: imm8,Y  is is_18_prefix=1 & addrMode=2 & Y; imm8
 {
     local tmp:2 = imm8 + Y;
     export *:1 tmp;
@@ -115,13 +116,13 @@ OP2: imm8    is addrMode=1; imm8
 {
     export *:2 imm8;
 }
-OP2: imm8,X      is is_y_prefix=0 & addrMode=2 & X; imm8
+OP2: imm8,X      is (is_18_prefix=0 & is_cd_prefix=0) & addrMode=2 & X; imm8
 {
     local tmp:2 = X + imm8;
     export *:2 tmp;
 }
 @ifdef HAS_Y_REGISTER
-OP2: imm8,Y      is is_y_prefix=1 & addrMode=2 & Y; imm8
+OP2: imm8,Y      is (is_18_prefix=1 | is_cd_prefix=1) & addrMode=2 & Y; imm8
 {
     local tmp:2 = Y + imm8;
     export *:2 tmp;
@@ -139,13 +140,13 @@ EA2: imm8      is addrMode=1; imm8
     export *:2 imm8;
 }
 @endif
-EA2: imm8,X      is is_y_prefix=0 & addrMode=2 & X; imm8
+EA2: imm8,X      is is_18_prefix=0 & addrMode=2 & X; imm8
 {
     local tmp:2 = X + imm8;
     export tmp;
 }
 @ifdef HAS_Y_REGISTER
-EA2: imm8,Y      is is_y_prefix=1 & addrMode=2 & Y; imm8
+EA2: imm8,Y      is is_18_prefix=1 & addrMode=2 & Y; imm8
 {
     local tmp:2 = Y + imm8;
     export tmp;
