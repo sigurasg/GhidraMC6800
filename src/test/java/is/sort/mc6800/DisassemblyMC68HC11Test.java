@@ -21,6 +21,7 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		super("MC68HC11:BE:16:default");
 	}
 
+	// Test the indexed,Y addressing mode for the 6800 instructions.
 	@Test
 	public void ADC() {
 		super.ADC();
@@ -198,6 +199,31 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 	public void TST() {
 		super.TST();
 		assertDisassemblesTo("TST 0x12,Y", 0x18, 0x6D, 0x12);
+	}
+
+	// Test the 6801 specific imm,Y instructions.
+	@Test
+	public void ADDD() {
+		super.ADDD();
+		assertDisassemblesTo("ADDD 0xab,Y", 0x18, 0xE3, 0xAB);
+	}
+
+	@Test
+	public void LDD() {
+		super.LDD();
+		assertDisassemblesTo("LDD 0xab,Y", 0x18, 0xEC, 0xAB);
+	}
+
+	@Test
+	public void STD() {
+		super.STD();
+		assertDisassemblesTo("STD 0xab,Y", 0x18, 0xED, 0xAB);
+	}
+
+	@Test
+	public void SUBD() {
+		super.SUBD();
+		assertDisassemblesTo("SUBD 0xab,Y", 0x18, 0xA3, 0xAB);
 	}
 
 	// TODO(siggi): Test the Y-register instructions.
