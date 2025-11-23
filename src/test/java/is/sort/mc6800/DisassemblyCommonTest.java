@@ -554,8 +554,8 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		assertNotNull(codeUnit);
 		assertTrue(codeUnit instanceof Instruction);
 
-		assertEquals(expected, codeUnit.toString());
 		assertEquals(bytes.length, codeUnit.getLength());
+		assertEquals(expected, codeUnit.toString());
 	}
 
 	protected void assertDisassemblesTo(String expected, int... code) {

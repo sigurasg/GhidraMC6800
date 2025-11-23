@@ -29,7 +29,7 @@ define register offset=0x00 size=2 [ D ];
 
 define register offset=0x20 size=4 contextreg;
 define context contextreg
-       is_18_prefix = (0,1) # Set if the 0x18 instruction prefix was encountered.
+       is_18_prefix = (0,0) # Set if the 0x18 instruction prefix was encountered.
        is_cd_prefix = (1,1) # Set if the 0xCD instruction prefix was encountered.
 ;
 
@@ -116,7 +116,7 @@ OP2: imm8    is addrMode=1; imm8
 {
     export *:2 imm8;
 }
-OP2: imm8,X      is (is_18_prefix=0 & is_cd_prefix=0) & addrMode=2 & X; imm8
+OP2: imm8,X      is addrMode=2 & X; imm8
 {
     local tmp:2 = X + imm8;
     export *:2 tmp;
