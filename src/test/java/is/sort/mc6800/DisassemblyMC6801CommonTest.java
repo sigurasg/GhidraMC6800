@@ -23,20 +23,20 @@ public abstract class DisassemblyMC6801CommonTest extends DisassemblyCommonTest 
 
 	@Test
 	public void ABX() {
-		test(0x3A, "ABX");
+		assertDisassemblesTo("ABX", 0x3A);
 	}
 
 	@Test
 	public void ADDD() {
-		test(0xC3, "ADDD #0x1234", 0x12, 0x34);
-		test(0xD3, "ADDD 0x00ab", 0xab);
-		test(0xF3, "ADDD 0x1234", 0x12, 0x34);
-		test(0xE3, "ADDD 0xab,X", 0xAB);
+		assertDisassemblesTo("ADDD #0x1234", 0xC3, 0x12, 0x34);
+		assertDisassemblesTo("ADDD 0x00ab", 0xD3, 0xab);
+		assertDisassemblesTo("ADDD 0x1234", 0xF3, 0x12, 0x34);
+		assertDisassemblesTo("ADDD 0xab,X", 0xE3, 0xAB);
 	}
 
 	@Test
 	public void ASLD() {
-		test(0x05, "ASLD");
+		assertDisassemblesTo("ASLD", 0x05);
 	}
 
 	@Override
@@ -46,50 +46,50 @@ public abstract class DisassemblyMC6801CommonTest extends DisassemblyCommonTest 
 		super.JSR();
 
 		// The direct JSR is first present in the MC6801.
-		test(0x9D, "JSR 0x00ab", 0xAB);
+		assertDisassemblesTo("JSR 0x00ab", 0x9D, 0xAB);
 	}
 
 	@Test
 	public void LDD() {
-		test(0xCC, "LDD #0x1234", 0x12, 0x34);
-		test(0xDC, "LDD 0x00ab", 0xab);
-		test(0xFC, "LDD 0x1234", 0x12, 0x34);
-		test(0xEC, "LDD 0xab,X", 0xAB);
+		assertDisassemblesTo("LDD #0x1234", 0xCC, 0x12, 0x34);
+		assertDisassemblesTo("LDD 0x00ab", 0xDC, 0xab);
+		assertDisassemblesTo("LDD 0x1234", 0xFC, 0x12, 0x34);
+		assertDisassemblesTo("LDD 0xab,X", 0xEC, 0xAB);
 	}
 
 	@Test
 	public void LSRD() {
-		test(0x04, "LSRD");
+		assertDisassemblesTo("LSRD", 0x04);
 	}
 
 	@Test
 	public void MUL() {
-		test(0x3D, "MUL");
+		assertDisassemblesTo("MUL", 0x3D);
 	}
 
 	@Test
 	public void PSHX() {
-		test(0x3C, "PSHX");
+		assertDisassemblesTo("PSHX", 0x3C);
 	}
 
 	@Test
 	public void PULX() {
-		test(0x38, "PULX");
+		assertDisassemblesTo("PULX", 0x38);
 	}
 
 	@Test
 	public void STD() {
-		test(0xDD, "STD 0x00ab", 0xAB);
-		test(0xFD, "STD 0x1234", 0x12, 0x34);
-		test(0xED, "STD 0xab,X", 0xAB);
+		assertDisassemblesTo("STD 0x00ab", 0xDD, 0xAB);
+		assertDisassemblesTo("STD 0x1234", 0xFD, 0x12, 0x34);
+		assertDisassemblesTo("STD 0xab,X", 0xED, 0xAB);
 	}
 
 	@Test
 	public void SUBD() {
-		test(0x83, "SUBD #0x1234", 0x12, 0x34);
-		test(0x93, "SUBD 0x00ab", 0xab);
-		test(0xB3, "SUBD 0x1234", 0x12, 0x34);
-		test(0xA3, "SUBD 0xab,X", 0xAB);
+		assertDisassemblesTo("SUBD #0x1234", 0x83, 0x12, 0x34);
+		assertDisassemblesTo("SUBD 0x00ab", 0x93, 0xab);
+		assertDisassemblesTo("SUBD 0x1234", 0xB3, 0x12, 0x34);
+		assertDisassemblesTo("SUBD 0xab,X", 0xA3, 0xAB);
 	}
 
 }

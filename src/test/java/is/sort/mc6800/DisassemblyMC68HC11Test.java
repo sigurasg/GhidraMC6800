@@ -24,12 +24,13 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
     // TODO(siggi): Test the Y-register instructions.
 	@Test
 	public void ADC() {
-		test(0x18, "ADCA 0xa,Y", 0x0A, 0xA9);
+        super.ADC();
+		assertDisassemblesTo( "ADCA 0xa,Y", 0x18, 0xA9, 0x0A);
     }
 
     @Test
 	public void ABY() {
-		test(0x18, "ABY", 0x3A);
+		assertDisassemblesTo("ABY", 0x18, 0x3A);
 	}
 
 	@Test
