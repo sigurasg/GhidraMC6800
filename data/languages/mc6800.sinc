@@ -27,11 +27,21 @@ define register offset=0x00 size=1 [ A B CC ];
 define register offset=0x00 size=2 [ D ];
 @endif
 
+define register offset=0x20 size=4 contextreg;
+define context contextreg
+       is_y_prefix = (0,1) # Set if the 0x18 instruction prefix was encountered.
+;
+
 # 16-bit registers:
-#    PC: Program counter
-#    S:  Stack pointer
-#    X: IX index register
-define register offset=0x10 size=2 [ PC X S ];
+ #    PC: Program counter
+ #    S:  Stack pointer
+ #    X: IX index register
+#    Y: IY index register (MC68HC11)
+@ifdef HAS_Y_REGISTER
+define register offset=0x10 size=2 [ PC S X Y];
+@else
+define register offset=0x10 size=2 [ PC S X ];
+@endif
 
 # Status bits in CC.
 define bitrange
@@ -78,11 +88,18 @@ OP1: imm8    is addrMode=1; imm8
 {
     export *:1 imm8;
 }
-OP1: imm8,X  is addrMode=2 & X; imm8
+OP1: imm8,X  is is_y_prefix=0 & addrMode=2 & X; imm8
 {
     local tmp:2 = imm8 + X;
     export *:1 tmp;
 }
+@ifdef HAS_Y_REGISTER
+OP1: imm8,Y  is is_y_prefix=1 & addrMode=2 & Y; imm8
+{
+    local tmp:2 = imm8 + Y;
+    export *:1 tmp;
+}
+@endif
 OP1: imm16    is addrMode=3; imm16
 {
     export *:1 imm16;
@@ -98,11 +115,18 @@ OP2: imm8    is addrMode=1; imm8
 {
     export *:2 imm8;
 }
-OP2: imm8,X      is addrMode=2 & X; imm8
+OP2: imm8,X      is is_y_prefix=0 & addrMode=2 & X; imm8
 {
     local tmp:2 = X + imm8;
     export *:2 tmp;
 }
+@ifdef HAS_Y_REGISTER
+OP2: imm8,Y      is is_y_prefix=1 & addrMode=2 & Y; imm8
+{
+    local tmp:2 = Y + imm8;
+    export *:2 tmp;
+}
+@endif
 OP2: imm16      is addrMode=3; imm16
 {
     export *:2 imm16;
@@ -115,11 +139,18 @@ EA2: imm8      is addrMode=1; imm8
     export *:2 imm8;
 }
 @endif
-EA2: imm8,X      is addrMode=2 & X; imm8
+EA2: imm8,X      is is_y_prefix=0 & addrMode=2 & X; imm8
 {
     local tmp:2 = X + imm8;
     export tmp;
 }
+@ifdef HAS_Y_REGISTER
+EA2: imm8,Y      is is_y_prefix=1 & addrMode=2 & Y; imm8
+{
+    local tmp:2 = Y + imm8;
+    export tmp;
+}
+@endif
 EA2: imm16    is addrMode=3; imm16
 {
     local tmp:2 = imm16;
