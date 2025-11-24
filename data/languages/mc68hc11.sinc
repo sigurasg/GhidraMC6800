@@ -98,3 +98,15 @@
 {
     compare(D, OP2);
 }
+
+# Missing instructions:
+# - FDIV
+# - IDIV
+# - BCLR
+# - BSET
+# - BRCLR
+# - BRSET
+# - XGDX
+# - XGDY
+# - STOP
+# - TEST
