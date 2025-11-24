@@ -91,8 +91,4 @@ public abstract class DisassemblyMC6801CommonTest extends DisassemblyCommonTest 
 		assertDisassemblesTo("SUBD 0x1234", 0xB3, 0x12, 0x34);
 		assertDisassemblesTo("SUBD 0xab,X", 0xA3, 0xAB);
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/main
