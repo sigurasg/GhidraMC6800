@@ -583,5 +583,9 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 			return null;
 		}
 	}
+
+	protected CodeUnit disassemble(byte[] bytes) {
+		return disassembleAt(0, bytes);
+	}
 }
 
