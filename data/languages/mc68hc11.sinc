@@ -12,13 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-# Parse the prefix for all instructions.
-# TODO(siggi): What's supposed to happen if the instruction doesn't
-#     have an imm,Y addressing mode?
+# Parse the 0x18 prefix for all instructions.
 :^instruction              is op=0x18; instruction  [ is_18_prefix=1; ] {}
 
-# This is used for the CPD/CPX instructions.
+# The 0xCD used for the CPD/CPX instructions.
 :^instruction              is op=0xCD; instruction  [ is_cd_prefix=1; ] {}
 
 # The 6800 Y specific instructions.
