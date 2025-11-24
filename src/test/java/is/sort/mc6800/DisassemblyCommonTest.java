@@ -582,6 +582,13 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		catch (Exception e) {
 			return null;
 		}
+<<<<<<< HEAD
+=======
+	}
+
+	protected CodeUnit disassemble(byte[] bytes) {
+		return disassembleAt(0, bytes);
+>>>>>>> origin/main
 	}
 }
 

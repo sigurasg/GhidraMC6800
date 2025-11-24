@@ -14,13 +14,11 @@
 
 package is.sort.mc6800;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import db.Transaction;
 import generic.jar.ResourceFile;
 import generic.test.AbstractGTest;
 import generic.test.AbstractGenericTest;
@@ -28,41 +26,15 @@ import ghidra.GhidraTestApplicationLayout;
 import ghidra.app.plugin.processors.sleigh.SleighLanguageProvider;
 import ghidra.framework.GModule;
 import ghidra.program.database.ProgramDB;
-import ghidra.program.disassemble.Disassembler;
 import ghidra.program.model.address.Address;
 import ghidra.program.model.lang.Language;
 import ghidra.program.model.lang.LanguageID;
-import ghidra.program.model.listing.CodeUnit;
-import ghidra.program.model.mem.MemoryBlock;
-import ghidra.util.task.TaskMonitor;
 import utility.application.ApplicationLayout;
 
 public abstract class AbstractIntegrationTest extends AbstractGenericTest {
 
 	protected Address address(int addr) {
 		return language.getDefaultSpace().getAddress(addr);
-	}
-
-	protected CodeUnit disassemble(byte[] bytes) {
-		try (Transaction transaction = program.openTransaction("disassemble")) {
-			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-			// Create an overlay block.
-			MemoryBlock block = program.getMemory()
-					.createInitializedBlock("test", address(0), stream, bytes.length,
-						TaskMonitor.DUMMY,
-						true);
-
-			Disassembler disassembler =
-				Disassembler.getDisassembler(program, TaskMonitor.DUMMY, null);
-			disassembler.disassemble(block.getStart(),
-				program.getMemory().getLoadedAndInitializedAddressSet());
-			CodeUnit ret = program.getCodeManager().getCodeUnitAt(block.getStart());
-			transaction.commit();
-			return ret;
-		}
-		catch (Exception e) {
-			return null;
-		}
 	}
 
 	public AbstractIntegrationTest(String lang) {
