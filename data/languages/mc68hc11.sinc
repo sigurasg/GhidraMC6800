@@ -12,11 +12,83 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Parse the 0x18 prefix for all instructions.
-:^instruction              is op=0x18; instruction  [ is_18_prefix=1; ] {}
+OP1Y: imm8,Y  is addrMode=2 & Y; imm8
+{
+    local tmp:2 = imm8 + Y;
+    export *:1 tmp;
+}
 
-# The 0xCD used for the CPD/CPX instructions.
-:^instruction              is op=0xCD; instruction  [ is_cd_prefix=1; ] {}
+@if 0
+OP2Y: imm8,Y      is addrMode=2 & Y; imm8
+{
+    local tmp:2 = Y + imm8;
+    export *:2 tmp;
+}
+@endif
+
+:NEG OP1Y    is op=0x18; op=0x60 ... & OP1Y
+{
+    negate(OP1Y);
+}
+
+:COM OP1Y    is op=0x18; op=0x63 ... & OP1Y
+{
+    complement(OP1Y);
+}
+
+:LSR OP1Y    is op=0x18; op=0x64 ... & OP1Y
+{
+    logicalShiftRight(OP1Y);
+}
+
+:ROR OP1Y    is op=0x18; op=0x66 ... & OP1Y
+{
+    rotateRightWithCarry(OP1Y);
+}
+
+:ASR OP1Y    is op=0x18; op=0x67 ... & OP1Y
+{
+    arithmeticShiftRight(OP1Y);
+}
+
+:ASL OP1Y    is op=0x18; op=0x68 ... & OP1Y
+{
+    logicalShiftLeft(OP1Y);
+}
+
+:ROL OP1Y    is op=0x18; op=0x69 ... & OP1Y
+{
+    rotateLeftWithCarry(OP1Y);
+}
+
+:DEC OP1Y    is op=0x18; op=0x6A ... & OP1Y
+{
+    decrement(OP1Y);
+}
+
+:INC OP1Y    is op=0x18; op=0x6C ... & OP1Y
+{
+    increment(OP1Y);
+}
+
+:TST OP1Y    is op=0x18; op=0x6D ... & OP1Y
+{
+    test(OP1Y);
+}
+
+@if 0
+// DO NOT SUBMIT
+:JMP EA2    is op=0x18; (op=0x6E | op=0x7E) ... & EA2
+{
+    local target:2 = EA2;
+    goto [target];
+}
+@endif
+
+:CLR OP1Y    is op=0x18; op=0x6F ... & OP1Y
+{
+    clear(OP1Y);
+}
 
 # The 6800 Y specific instructions.
 :INY    is op=0x18; op=0x08
@@ -41,16 +113,17 @@
     S = Y - 1;
 }
 
-:CPY OP2    is is_18_prefix=1 & (op=0x8C | op=0x9C | op=0xAC | op=0xBC) ... & OP2
+@if 0
+:CPY OP2    is (op=0x8C | op=0x9C | op=0xAC | op=0xBC) ... & OP2
 {
     compare(Y, OP2);
 }
-:CPY OP2    is op=0x1A; (op=0x8C | op=0x9C | op=0xAC | op=0xBC) ... & OP2
+:CPY OP2    is (op=0x8C | op=0x9C | op=0xAC | op=0xBC) ... & OP2
 {
     compare(Y, OP2);
 }
 
-:LDY OP2    is is_18_prefix=1 & (op=0xCE | op=0xDE | op=0xEE | op=0xFE)  ... & OP2
+:LDY OP2    is (op=0xCE | op=0xDE | op=0xEE | op=0xFE)  ... & OP2
 {
     loadRegister(Y, OP2);
 }
@@ -59,7 +132,7 @@
     loadRegister(Y, OP2);
 }
 
-:STY OP2    is is_18_prefix=1 & (op=0xDF | op=0xEF | op=0xFF) ... & OP2
+:STY OP2    is (op=0xDF | op=0xEF | op=0xFF) ... & OP2
 {
     storeRegister(Y, OP2);
 }
@@ -91,7 +164,7 @@
 {
     compare(D, OP2);
 }
-:CPD OP2    is is_cd_prefix=1 & (op=0x83 | op=0x93 | op=0xA3 | op=0xB3) ... & OP2
+:CPD OP2    is op=0xCD ; (op=0x83 | op=0x93 | op=0xA3 | op=0xB3) ... & OP2
 {
     compare(D, OP2);
 }
@@ -107,3 +180,4 @@
 # - XGDY
 # - STOP
 # - TEST
+@endif

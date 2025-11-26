@@ -26,8 +26,7 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 	public void ADC() {
 		super.ADC();
 		assertDisassemblesTo("ADCA 0xa,Y", 0x18, 0xA9, 0x0A);
-		assertDisassemblesTo("ADCB 0xa,Y", 0x18, 0xE9, 0x0A);
-		
+		assertDisassemblesTo("ADCB 0xa,Y", 0x18, 0xE9, 0x0A);	
 	}
 	
 	@Test
