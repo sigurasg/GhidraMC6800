@@ -90,6 +90,121 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
     clear(OP1Y);
 }
 
+:SUBA OP1Y    is op=0x18; op=0xA0 ... & OP1Y
+{
+    subtraction(A, OP1Y);
+}
+
+:SUBB OP1Y    is op=0x18; op=0xE0 ... & OP1Y
+{
+    subtraction(B, OP1Y);
+}
+
+:CMPA OP1Y    is op=0x18; op=0xA1 ... & OP1Y
+{
+    compare(A, OP1Y);
+}
+
+:CMPB OP1Y    is op=0x18; op=0xE1 ... & OP1Y
+{
+    compare(B, OP1Y);
+}
+
+:SBCA OP1Y    is op=0x18; op=0xA2 ... & OP1Y
+{
+    subtractionWithCarry(A, OP1Y);
+}
+
+:SBCB OP1Y    is op=0x18; op=0xE2 ... & OP1Y
+{
+    subtractionWithCarry(B, OP1Y);
+}
+
+:ANDA OP1Y    is op=0x18; op=0xA4 ... & OP1Y
+{
+    logicalAnd(A, OP1Y);
+}
+
+:ANDB OP1Y    is op=0x18; op=0xE4 ... & OP1Y
+{
+    logicalAnd(B, OP1Y);
+}
+
+:BITA OP1Y    is op=0x18; op=0xA5 ... & OP1Y
+{
+    bitTest(A, OP1Y);
+}
+
+:BITB OP1Y    is op=0x18; op=0xE5 ... & OP1Y
+{
+    bitTest(B, OP1Y);
+}
+
+:LDAA OP1Y    is op=0x18; op=0xA6 ... & OP1Y
+{
+    loadRegister(A, OP1Y);
+}
+
+:LDAB OP1Y    is op=0x18; op=0xE6 ... & OP1Y
+{
+    loadRegister(B, OP1Y);
+}
+
+:STAA OP1Y    is op=0x18; op=0xA7 ... & OP1Y
+{
+    storeRegister(A, OP1Y);
+}
+
+:STAB OP1Y    is op=0x18; op=0xE7 ... & OP1Y
+{
+    storeRegister(B, OP1Y);
+}
+
+:EORA OP1Y    is op=0x18; op=0xA8 ... & OP1Y
+{
+    logicalExclusiveOr(A, OP1Y);
+}
+
+:EORB OP1Y    is op=0x18; op=0xE8 ... & OP1Y
+{
+    logicalExclusiveOr(B, OP1Y);
+}
+
+:ADCA OP1Y    is op=0x18; op=0xA9 ... & OP1Y
+{
+    additionWithCarry(A, OP1Y);
+}
+
+:ADCB OP1Y    is op=0x18; op=0xE9 ... & OP1Y
+{
+    additionWithCarry(B, OP1Y);
+}
+
+:ORAA OP1Y    is op=0x18; op=0xAA ... & OP1Y
+{
+    logicalOr(A, OP1Y);
+}
+
+:ORAB OP1Y    is op=0x18; op=0xEA ... & OP1Y
+{
+    logicalOr(B, OP1Y);
+}
+
+:ADDA OP1Y    is op=0x18; op=0xAB ... & OP1Y
+{
+    setHFlag(A, OP1Y);
+    addition(A, OP1Y);
+}
+
+:ADDB OP1Y    is op=0x18; op=0xEB ... & OP1Y
+{
+    setHFlag(B, OP1Y);
+    addition(B, OP1Y);
+}
+
+@if 0
+@endif
+
 # The 6800 Y specific instructions.
 :INY    is op=0x18; op=0x08
 {
