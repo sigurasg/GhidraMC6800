@@ -18,13 +18,11 @@ OP1Y: imm8,Y  is addrMode=2 & Y; imm8
     export *:1 tmp;
 }
 
-@if 0
 OP2Y: imm8,Y      is addrMode=2 & Y; imm8
 {
     local tmp:2 = Y + imm8;
     export *:2 tmp;
 }
-@endif
 
 :NEG OP1Y    is op=0x18; op=0x60 ... & OP1Y
 {
@@ -228,35 +226,45 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
     S = Y - 1;
 }
 
-@if 0
-:CPY OP2    is (op=0x8C | op=0x9C | op=0xAC | op=0xBC) ... & OP2
+:CPY OP2    is op=0x18; (op=0x8C | op=0x9C | op=0xBC) ... & OP2
 {
     compare(Y, OP2);
 }
-:CPY OP2    is (op=0x8C | op=0x9C | op=0xAC | op=0xBC) ... & OP2
+:CPY OP2Y    is op=0x18; op=0xAC ... & OP2Y
+{
+    compare(Y, OP2Y);
+}
+:CPY OP2    is op=0x1A; op=0xAC ... & OP2
 {
     compare(Y, OP2);
 }
 
-:LDY OP2    is (op=0xCE | op=0xDE | op=0xEE | op=0xFE)  ... & OP2
+:LDY OP2    is op=0x18; (op=0xCE | op=0xDE | op=0xFE) ... & OP2
 {
     loadRegister(Y, OP2);
 }
-:LDY OP2    is op=0x1A; (op=0xCE | op=0xDE | op=0xEE | op=0xFE) ... & OP2
+:LDY OP2Y    is op=0x18; op=0xEE ... & OP2Y
+{
+    loadRegister(Y, OP2Y);
+}
+:LDY OP2    is op=0x1A; op=0xEE ... & OP2
 {
     loadRegister(Y, OP2);
 }
 
-:STY OP2    is (op=0xDF | op=0xEF | op=0xFF) ... & OP2
+:STY OP2    is op=0x18; (op=0xDF | op=0xFF) ... & OP2
 {
     storeRegister(Y, OP2);
 }
-:STY OP2    is op=0x1A; (op=0xDF | op=0xEF | op=0xFF) ... & OP2
+:STY OP2Y    is op=0x18; op=0xEF ... & OP2Y
+{
+    storeRegister(Y, OP2Y);
+}
+:STY OP2    is op=0x1A; op=0xEF ... & OP2
 {
     storeRegister(Y, OP2);
 }
 
-# 6801 Y-specific instructions.
 :ABY        is op=0x18; op=0x3A
 {
     # No effect on flags.
@@ -275,15 +283,33 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
 
 # MC68HC11 specific instructions.
 
+# 6801 Y-specific instructions.
+
+:ADDD OP2Y   is op=0x18; op=0xE3 ... & OP2Y
+{
+    addition(D, OP2Y);
+}
+
+:LDD OP2Y    is op=0x18; op=0xEC ... & OP2Y
+{
+    loadRegister(D, OP2Y);
+}
+
 :CPD OP2    is op=0x1A; (op=0x83 | op=0x93 | op=0xA3 | op=0xB3) ... & OP2
 {
     compare(D, OP2);
 }
-:CPD OP2    is op=0xCD ; (op=0x83 | op=0x93 | op=0xA3 | op=0xB3) ... & OP2
+:CPD OP2Y    is op=0xCD; op=0xA3 ... & OP2Y
 {
-    compare(D, OP2);
+    compare(D, OP2Y);
 }
 
+:CPX OP2Y    is op=0xCD; op=0xAC ... & OP2Y
+{
+    compare(X, OP2Y);
+}
+
+@if 0
 # Missing instructions:
 # - FDIV
 # - IDIV
