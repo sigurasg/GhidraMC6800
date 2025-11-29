@@ -552,10 +552,10 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		CodeUnit codeUnit = disassembleAt(addr, bytes);
 
 		assertNotNull(codeUnit);
-		assertTrue(codeUnit instanceof Instruction);
+		assertTrue(codeUnit instanceof Instruction, "Not an instruction");
 
-		assertEquals(bytes.length, codeUnit.getLength());
 		assertEquals(expected, codeUnit.toString());
+		assertEquals(bytes.length, codeUnit.getLength(), "Wrong instruction length.");
 	}
 
 	protected void assertDisassemblesTo(String expected, int... code) {

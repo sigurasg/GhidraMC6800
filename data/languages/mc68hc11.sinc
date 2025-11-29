@@ -74,14 +74,39 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
     test(OP1Y);
 }
 
-@if 0
-// DO NOT SUBMIT
-:JMP EA2    is op=0x18; (op=0x6E | op=0x7E) ... & EA2
+:JMP OP2Y    is op=0x18; op=0x6E ... & OP2Y
 {
-    local target:2 = EA2;
+    local target:2 = OP2Y;
     goto [target];
 }
-@endif
+
+:JSR OP2Y    is op=0x18; op=0xAD ... & OP2Y
+{
+    local addr:2 = inst_next;
+    Push2(S, addr);
+    local target:2 = OP2Y;
+    call [target];
+}
+
+:LDS OP2Y    is op=0x18; op=0xAE ... & OP2Y
+{
+    storeRegister(Y, OP2Y);
+}
+
+:STS OP2Y    is op=0x18; op=0xAF ... & OP2Y
+{
+    storeRegister(S, OP2Y);
+}
+
+:STD OP2Y    is op=0x18; op=0xED ... & OP2Y
+{
+    storeRegister(D, OP2Y);
+}
+
+:SUBD OP2Y    is op=0x18; op=0xA3 ... & OP2Y
+{
+    subtraction(D, OP2Y);
+}
 
 :CLR OP1Y    is op=0x18; op=0x6F ... & OP1Y
 {
