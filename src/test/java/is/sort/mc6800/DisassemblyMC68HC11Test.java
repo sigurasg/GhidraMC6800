@@ -297,7 +297,7 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		assertInvalidOpcode(0x14);
 		assertInvalidOpcode(0x15);
 
-		assertInvalidExactOpcode(0x18);
+		assertInvalidExactOpcode(0x18);		
 		assertInvalidExactOpcode(0x1A);
 
 		assertInvalidOpcode(0x1C);
@@ -334,5 +334,35 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		assertInvalidExactOpcode(0xCD);
 
 		assertInvalidOpcode(0xCF);
+
+		// Opcode page 1.
+		assertInvalidOpcode(0x18, 0x00);
+		assertInvalidOpcode(0x18, 0x01);
+		assertInvalidOpcode(0x18, 0x02);
+		assertInvalidOpcode(0x18, 0x03);
+		assertInvalidOpcode(0x18, 0x04);
+		assertInvalidOpcode(0x18, 0x05);
+		assertInvalidOpcode(0x18, 0x06);
+		assertInvalidOpcode(0x18, 0x07);
+		assertInvalidOpcode(0x18, 0x0A);
+		assertInvalidOpcode(0x18, 0x0B);
+		assertInvalidOpcode(0x18, 0x0C);
+		assertInvalidOpcode(0x18, 0x0D);
+		assertInvalidOpcode(0x18, 0x0E);
+		assertInvalidOpcode(0x18, 0x0F);
+
+		// TODO(siggi): Make this more concise?
+		assertInvalidOpcode(0x18, 0x10);
+		assertInvalidOpcode(0x18, 0x11);
+		assertInvalidOpcode(0x18, 0x12);
+		assertInvalidOpcode(0x18, 0x13);
+		assertInvalidOpcode(0x18, 0x14);
+		assertInvalidOpcode(0x18, 0x15);
+		assertInvalidOpcode(0x18, 0x16);
+		assertInvalidOpcode(0x18, 0x17);
+		assertInvalidOpcode(0x18, 0x18);
+		assertInvalidOpcode(0x18, 0x19);
+		assertInvalidOpcode(0x18, 0x1A);
+		assertInvalidOpcode(0x18, 0x1B);
 	}
-}
+}	

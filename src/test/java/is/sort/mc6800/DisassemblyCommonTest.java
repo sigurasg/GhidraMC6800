@@ -558,7 +558,7 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		stream.write(0x03);
 
 		CodeUnit codeUnit = disassemble(stream.toByteArray());
-		assertTrue(codeUnit instanceof Data);
+		assertTrue(codeUnit instanceof Data, codeUnit.toString());
 		assertEquals(opCode.length, opCode.length, "Wrong data length.");
 	}
 
