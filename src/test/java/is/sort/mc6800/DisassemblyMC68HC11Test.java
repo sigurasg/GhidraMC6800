@@ -297,10 +297,8 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		assertInvalidOpcode(0x14);
 		assertInvalidOpcode(0x15);
 
-		// TODO(siggi): Fixme!
-		assertInvalidOpcode(0x18);
-		assertInvalidOpcode(0x1A);
-
+		assertInvalidExactOpcode(0x18);
+		assertInvalidExactOpcode(0x1A);
 
 		assertInvalidOpcode(0x1C);
 		assertInvalidOpcode(0x1D);
@@ -333,7 +331,8 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		assertInvalidOpcode(0x8F);
 
 		assertInvalidOpcode(0xC7);
-		assertInvalidOpcode(0xCD);
+		assertInvalidExactOpcode(0xCD);
+
 		assertInvalidOpcode(0xCF);
 	}
 }

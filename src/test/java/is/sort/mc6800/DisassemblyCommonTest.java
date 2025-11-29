@@ -536,10 +536,30 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		assertDisassemblesTo("WAI", 0x3E);
 	}
 
-	protected void assertInvalidOpcode(int opCode) {
-		byte[] code = new byte[] { (byte) opCode, (byte) 0x12, (byte) 0x34 };
-		CodeUnit codeUnit = disassemble(code);
+	protected void assertInvalidExactOpcode(int ... opCode) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		for (int arg : opCode) {
+			stream.write(arg);
+		}
+		CodeUnit codeUnit = disassemble(stream.toByteArray());
 		assertTrue(codeUnit instanceof Data);
+		assertEquals(opCode.length, codeUnit.getLength(), "Wrong data length.");
+	}
+
+	protected void assertInvalidOpcode(int ... opCode) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		for (int arg : opCode) {
+			stream.write(arg);
+		}
+		// Extend the invalid opcode with extra bytes to verify that
+		// the disassembler does not try to use them.
+		stream.write(0x01);
+		stream.write(0x02);
+		stream.write(0x03);
+
+		CodeUnit codeUnit = disassemble(stream.toByteArray());
+		assertTrue(codeUnit instanceof Data);
+		assertEquals(opCode.length, opCode.length, "Wrong data length.");
 	}
 
 	protected void assertDisassemblesAt(String expected, int addr, int... code) {
