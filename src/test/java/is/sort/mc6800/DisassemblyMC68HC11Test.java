@@ -14,6 +14,12 @@
 
 package is.sort.mc6800;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
@@ -26,9 +32,9 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 	public void ADC() {
 		super.ADC();
 		assertDisassemblesTo("ADCA 0xa,Y", 0x18, 0xA9, 0x0A);
-		assertDisassemblesTo("ADCB 0xa,Y", 0x18, 0xE9, 0x0A);	
+		assertDisassemblesTo("ADCB 0xa,Y", 0x18, 0xE9, 0x0A);
 	}
-	
+
 	@Test
 	public void ADD() {
 		super.ADD();
@@ -174,7 +180,7 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		super.STS();
 		assertDisassemblesTo("STS 0xa,Y", 0x18, 0xAF, 0x0A);
 	}
-	
+
 	@Test
 	public void SUB() {
 		super.SUB();
@@ -246,6 +252,7 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		assertDisassemblesTo("LDY 0x12,Y", 0x18, 0xEE, 0x12);
 		assertDisassemblesTo("LDY 0x12,X", 0x1A, 0xEE, 0x12);
 	}
+
 	@Test
 	public void STY() {
 		assertDisassemblesTo("STY 0x000a", 0x18, 0xDF, 0x0A);
@@ -287,7 +294,7 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 	}
 
 	@Test
-	public void InvalidOpCodes() {
+	public void InvalidPage0OpCodes() {
 		assertInvalidOpcode(0x00);
 		assertInvalidOpcode(0x02);
 		assertInvalidOpcode(0x03);
@@ -297,7 +304,7 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		assertInvalidOpcode(0x14);
 		assertInvalidOpcode(0x15);
 
-		assertInvalidExactOpcode(0x18);		
+		assertInvalidExactOpcode(0x18);
 		assertInvalidExactOpcode(0x1A);
 
 		assertInvalidOpcode(0x1C);
@@ -334,35 +341,56 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		assertInvalidExactOpcode(0xCD);
 
 		assertInvalidOpcode(0xCF);
-
-		// Opcode page 1.
-		assertInvalidOpcode(0x18, 0x00);
-		assertInvalidOpcode(0x18, 0x01);
-		assertInvalidOpcode(0x18, 0x02);
-		assertInvalidOpcode(0x18, 0x03);
-		assertInvalidOpcode(0x18, 0x04);
-		assertInvalidOpcode(0x18, 0x05);
-		assertInvalidOpcode(0x18, 0x06);
-		assertInvalidOpcode(0x18, 0x07);
-		assertInvalidOpcode(0x18, 0x0A);
-		assertInvalidOpcode(0x18, 0x0B);
-		assertInvalidOpcode(0x18, 0x0C);
-		assertInvalidOpcode(0x18, 0x0D);
-		assertInvalidOpcode(0x18, 0x0E);
-		assertInvalidOpcode(0x18, 0x0F);
-
-		// TODO(siggi): Make this more concise?
-		assertInvalidOpcode(0x18, 0x10);
-		assertInvalidOpcode(0x18, 0x11);
-		assertInvalidOpcode(0x18, 0x12);
-		assertInvalidOpcode(0x18, 0x13);
-		assertInvalidOpcode(0x18, 0x14);
-		assertInvalidOpcode(0x18, 0x15);
-		assertInvalidOpcode(0x18, 0x16);
-		assertInvalidOpcode(0x18, 0x17);
-		assertInvalidOpcode(0x18, 0x18);
-		assertInvalidOpcode(0x18, 0x19);
-		assertInvalidOpcode(0x18, 0x1A);
-		assertInvalidOpcode(0x18, 0x1B);
 	}
-}	
+
+	@Test
+	public void InvalidPage1OpCodes() {
+		Integer[] validOpcodes = {
+			0x08, 0x09,
+			0x1C, 0x1D, 0x1E, 0x1F,
+			0x30, 0x35, 0x38, 0x3A, 0x3C,
+			0x60, 0x63, 0x64, 0x66, 0x67, 0x68, 0x69, 0x6A, 0X6C, 0x6D, 0x6E, 0x6F,
+			0x8C, 0x8F,
+			0x9C,
+			0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD,
+			0xAE, 0xAF,
+			0xBC,
+			0xCE,
+			0xDE, 0xDF,
+			0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xEB, 0xEC, 0xED,
+			0xEE, 0xEF,
+			0xFE, 0xFF
+		};
+		assertInvaldOpcodes(0x18, validOpcodes);
+	}
+
+	@Test
+	public void InvalidPage2OpCodes() {
+		Integer[] validOpcodes = {
+			0x83,
+			0x93,
+			0xA3, 0xAC,
+			0xB3,
+			0xEE, 0xEF,
+		};
+		assertInvaldOpcodes(0x1A, validOpcodes);
+	}
+
+	@Test
+	public void InvalidPage3OpCodes() {
+		Integer[] validOpcodes = {
+			0xA3, 0xAC,
+			0xEE, 0xEF,
+		};
+		assertInvaldOpcodes(0xCD, validOpcodes);
+	}
+
+	private void assertInvaldOpcodes(int prefix, Integer[] validOpcodes) {
+		Set<Integer> validSet = new HashSet<>(Arrays.asList(validOpcodes));
+		for (int opcode = 0x00; opcode < 0x100; opcode++) {
+			if (!validSet.contains(opcode)) {
+				assertInvalidOpcode(prefix, opcode);
+			}
+		}
+	}
+}

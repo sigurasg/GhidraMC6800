@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
@@ -536,7 +537,7 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		assertDisassemblesTo("WAI", 0x3E);
 	}
 
-	protected void assertInvalidExactOpcode(int ... opCode) {
+	protected void assertInvalidExactOpcode(int... opCode) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		for (int arg : opCode) {
 			stream.write(arg);
@@ -546,7 +547,7 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		assertEquals(opCode.length, codeUnit.getLength(), "Wrong data length.");
 	}
 
-	protected void assertInvalidOpcode(int ... opCode) {
+	protected void assertInvalidOpcode(int... opCode) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		for (int arg : opCode) {
 			stream.write(arg);
@@ -558,7 +559,9 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		stream.write(0x03);
 
 		CodeUnit codeUnit = disassemble(stream.toByteArray());
-		assertTrue(codeUnit instanceof Data, codeUnit.toString());
+		assertTrue(codeUnit instanceof Data,
+			"Got " + codeUnit.toString() + " for " + Arrays.toString(opCode));
+
 		assertEquals(opCode.length, opCode.length, "Wrong data length.");
 	}
 
@@ -608,4 +611,3 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		return disassembleAt(0, bytes);
 	}
 }
-
