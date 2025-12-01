@@ -294,57 +294,22 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 	}
 
 	@Test
-	public void InvalidPage0OpCodes() {
-		assertInvalidOpcode(0x00);
-		assertInvalidOpcode(0x02);
-		assertInvalidOpcode(0x03);
-
-		assertInvalidOpcode(0x12);
-		assertInvalidOpcode(0x13);
-		assertInvalidOpcode(0x14);
-		assertInvalidOpcode(0x15);
-
-		assertInvalidExactOpcode(0x18);
-		assertInvalidExactOpcode(0x1A);
-
-		assertInvalidOpcode(0x1C);
-		assertInvalidOpcode(0x1D);
-		assertInvalidOpcode(0x1E);
-		assertInvalidOpcode(0x1F);
-
-		assertInvalidOpcode(0x41);
-		assertInvalidOpcode(0x42);
-		assertInvalidOpcode(0x45);
-		assertInvalidOpcode(0x4B);
-		assertInvalidOpcode(0x4E);
-
-		assertInvalidOpcode(0x51);
-		assertInvalidOpcode(0x52);
-		assertInvalidOpcode(0x55);
-		assertInvalidOpcode(0x5B);
-		assertInvalidOpcode(0x5E);
-
-		assertInvalidOpcode(0x61);
-		assertInvalidOpcode(0x62);
-		assertInvalidOpcode(0x65);
-		assertInvalidOpcode(0x6B);
-
-		assertInvalidOpcode(0x71);
-		assertInvalidOpcode(0x72);
-		assertInvalidOpcode(0x75);
-		assertInvalidOpcode(0x7B);
-
-		assertInvalidOpcode(0x87);
-		assertInvalidOpcode(0x8F);
-
-		assertInvalidOpcode(0xC7);
-		assertInvalidExactOpcode(0xCD);
-
-		assertInvalidOpcode(0xCF);
+	public void Page0OpCodes() {
+		Integer[] invalidOpcodes = {
+			0x18, 0x1A,
+			0x41, 0x42, 0x45, 0x4B, 0x4E,
+			0x51, 0x52, 0x55, 0x5B, 0x5E,
+			0x61, 0x62, 0x65, 0x6B,
+			0x71, 0x72, 0x75, 0x7B,
+			0x87,
+			0xC7, 0xCD
+		};
+		assertValidOpcodes(complementOpcodes(invalidOpcodes));
+		assertInvaldOpcodes(invalidOpcodes);
 	}
 
 	@Test
-	public void InvalidPage1OpCodes() {
+	public void Page1OpCodes() {
 		Integer[] validOpcodes = {
 			0x08, 0x09,
 			0x1C, 0x1D, 0x1E, 0x1F,
@@ -361,11 +326,12 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 			0xEE, 0xEF,
 			0xFE, 0xFF
 		};
-		assertInvaldOpcodes(0x18, validOpcodes);
+		assertValidOpcodes(0x18, validOpcodes);
+		assertInvaldOpcodes(0x18, complementOpcodes(validOpcodes));
 	}
 
 	@Test
-	public void InvalidPage2OpCodes() {
+	public void Page2OpCodes() {
 		Integer[] validOpcodes = {
 			0x83,
 			0x93,
@@ -373,24 +339,52 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 			0xB3,
 			0xEE, 0xEF,
 		};
-		assertInvaldOpcodes(0x1A, validOpcodes);
+		assertValidOpcodes(0x1A, validOpcodes);
+		assertInvaldOpcodes(0x1A, complementOpcodes(validOpcodes));
 	}
 
 	@Test
-	public void InvalidPage3OpCodes() {
+	public void Page3OpCodes() {
 		Integer[] validOpcodes = {
 			0xA3, 0xAC,
 			0xEE, 0xEF,
 		};
-		assertInvaldOpcodes(0xCD, validOpcodes);
+		assertValidOpcodes(0xCD, validOpcodes);
+		assertInvaldOpcodes(0xCD, complementOpcodes(validOpcodes));
 	}
 
-	private void assertInvaldOpcodes(int prefix, Integer[] validOpcodes) {
-		Set<Integer> validSet = new HashSet<>(Arrays.asList(validOpcodes));
+	private void assertInvaldOpcodes(int prefix, Integer[] invalidOpcodes) {
+		for (int opcode : invalidOpcodes) {
+			assertInvalidOpcode(prefix, opcode);
+		}
+	}
+
+	private void assertInvaldOpcodes(Integer[] invalidOpcodes) {
+		for (int opcode : invalidOpcodes) {
+			assertInvalidOpcode(opcode);
+		}
+	}
+
+	private void assertValidOpcodes(int prefix, Integer[] validOpcodes) {
+		for (int opcode : validOpcodes) {
+			assertValidOpcode(prefix, opcode);
+		}
+	}
+
+	private void assertValidOpcodes(Integer[] validOpcodes) {
+		for (int opcode : validOpcodes) {
+			assertValidOpcode(opcode);
+		}
+	}
+
+	Integer[] complementOpcodes(Integer[] opcodes) {
+		Set<Integer> validSet = new HashSet<>(Arrays.asList(opcodes));
+		Set<Integer> complementSet = new HashSet<>();
 		for (int opcode = 0x00; opcode < 0x100; opcode++) {
 			if (!validSet.contains(opcode)) {
-				assertInvalidOpcode(prefix, opcode);
+				complementSet.add(opcode);
 			}
 		}
+		return complementSet.toArray(new Integer[complementSet.size()]);
 	}
 }

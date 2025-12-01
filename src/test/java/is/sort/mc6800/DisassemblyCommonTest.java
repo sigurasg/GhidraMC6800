@@ -562,7 +562,26 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		assertTrue(codeUnit instanceof Data,
 			"Got " + codeUnit.toString() + " for " + Arrays.toString(opCode));
 
-		assertEquals(opCode.length, opCode.length, "Wrong data length.");
+		assertEquals(1, codeUnit.getLength(), "Wrong data length.");
+	}
+
+	protected void assertValidOpcode(int... opCode) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		for (int arg : opCode) {
+			stream.write(arg);
+		}
+		// Extend the valid opcode with extra bytes in case
+		// the instruction has an argument.
+		stream.write(0x01);
+		stream.write(0x02);
+		stream.write(0x03);
+
+		CodeUnit codeUnit = disassemble(stream.toByteArray());
+		assertTrue(codeUnit instanceof Instruction,
+			"Got " + codeUnit.toString() + " for " + Arrays.toString(opCode));
+
+		assertTrue(codeUnit.getLength() >= opCode.length,
+			"Instruction too short: " + codeUnit.toString());
 	}
 
 	protected void assertDisassemblesAt(String expected, int addr, int... code) {

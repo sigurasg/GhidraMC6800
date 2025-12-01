@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-OP1Y: imm8,Y  is addrMode=2 & Y; imm8
+OP1Y: imm8,Y  is addrMode & Y; imm8
 {
     local tmp:2 = imm8 + Y;
     export *:1 tmp;
@@ -23,6 +23,8 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
     local tmp:2 = Y + imm8;
     export *:2 tmp;
 }
+
+# The 6800 instructions with imm,Y address mode.
 
 :NEG OP1Y    is op=0x18; op=0x60 ... & OP1Y
 {
@@ -225,9 +227,6 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
     addition(B, OP1Y);
 }
 
-@if 0
-@endif
-
 # The 6800 Y specific instructions.
 :INY    is op=0x18; op=0x08
 {
@@ -308,7 +307,65 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
 
 # MC68HC11 specific instructions.
 
+:TEST       is op=0x00 {
+    # This is a NOP for our purposes.    
+    goto inst_next;
+}
+
+:IDIV       is op=0x02 {
+    # TODO(siggi): Implement
+}
+
+:FDIV       is op=0x03 {
+    # TODO(siggi): Implement
+}
+
+# TODO(siggi): These are 3-4 byte dual operand instruction!!!
+:BRSET OP1,imm8     is (op=0x12 | op=0x1E); OP1; imm8
+{
+    # TODO(siggi): Implement
+}
+:BRSET OP1Y,imm8     is op=0x18; op=0x1E; OP1Y; imm8
+{
+    # TODO(siggi): Implement
+}
+
+:BRCLR OP1,imm8     is (op=0x13 | op=0x1F); OP1; imm8
+{
+    # TODO(siggi): Implement
+}
+:BRCLR OP1Y,imm8     is op=0x18; op=0x1F; OP1Y; imm8
+{
+    # TODO(siggi): Implement
+}
+
+:BSET   OP1         is (op=0x14 | op=0x1C); OP1 {
+    # TODO(siggi): Implement
+}
+:BSET   OP1Y        is op=0x18; op=0x1C; OP1Y {
+    # TODO(siggi): Implement
+}
+
+:BCLR   OP1         is (op=0x15 | op=0x1D); OP1 {
+    # TODO(siggi): Implement
+}
+:BCLR   OP1Y        is op=0x18; op=0x1D; OP1Y {
+    # TODO(siggi): Implement
+}
+
+:XGDX               is op=0x8F {
+    # TODO(siggi): Implement
+}
+:XGDY               is op=0x18; op=0x8F {
+    # TODO(siggi): Implement
+}
+
+:STOP               is op=0xCF {
+    # TODO(siggi): Implement
+}
+
 # 6801 Y-specific instructions.
+
 
 :ADDD OP2Y   is op=0x18; op=0xE3 ... & OP2Y
 {
@@ -332,6 +389,14 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
 :CPX OP2Y    is op=0xCD; op=0xAC ... & OP2Y
 {
     compare(X, OP2Y);
+}
+
+:LDX OP2Y   is op=0xCD; op=0xEE ... & OP2Y {
+    loadRegister(X, OP2Y);
+}
+
+:STX OP2Y   is op=0xCD; op=0xEF ... & OP2Y {
+    storeRegister(X, OP2Y);
 }
 
 @if 0
