@@ -18,9 +18,9 @@ ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-ENV VERSION=11.4.2_PUBLIC
-ENV GHIDRA_SHA=795a02076af16257bd6f3f4736c4fc152ce9ff1f95df35cd47e2adc086e037a6
-ENV GHIDRA_URL=https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.4.2_build/ghidra_11.4.2_PUBLIC_20250826.zip
+ENV VERSION=12.0_PUBLIC
+ENV GHIDRA_SHA=af43e8cfb2fa4490cf6020c3a2bde25c159d83f45236a0542688a024e8fc1941
+ENV GHIDRA_URL=https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_12.0_build/ghidra_12.0_PUBLIC_20251205.zip
 
 
 RUN \
