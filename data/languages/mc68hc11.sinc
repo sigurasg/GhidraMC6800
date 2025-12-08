@@ -346,26 +346,30 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
     # TODO(siggi): Implement
 }
 
-:BCLR   OP1         is (op=0x15 | op=0x1D); OP1 {
+:BCLR   OP1         is (op=0x15 | op=0x1D); OP1; imm8 {
     # TODO(siggi): Implement
 }
-:BCLR   OP1Y        is op=0x18; op=0x1D; OP1Y {
+:BCLR   OP1Y        is op=0x18; op=0x1D; OP1Y; imm8 {
     # TODO(siggi): Implement
 }
 
 :XGDX               is op=0x8F {
-    # TODO(siggi): Implement
+    local tmp:2=X;
+    X=D;
+    D=tmp;
 }
 :XGDY               is op=0x18; op=0x8F {
-    # TODO(siggi): Implement
+    local tmp:2=Y;
+    Y=D;
+    D=tmp;
 }
 
 :STOP               is op=0xCF {
-    # TODO(siggi): Implement
+    # Treat as a NOP for disassembly and emulation?
+    goto inst_next;
 }
 
 # 6801 Y-specific instructions.
-
 
 :ADDD OP2Y   is op=0x18; op=0xE3 ... & OP2Y
 {
