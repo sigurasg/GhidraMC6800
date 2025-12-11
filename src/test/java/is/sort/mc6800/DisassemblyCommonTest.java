@@ -560,9 +560,10 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		stream.write(0x02);
 		stream.write(0x03);
 
-		CodeUnit codeUnit = disassemble(stream.toByteArray());
+		byte[] bytes = stream.toByteArray();
+		CodeUnit codeUnit = disassemble(bytes);
 		assertTrue(codeUnit instanceof Data,
-			"Got " + codeUnit.toString() + " for " + Arrays.toString(opCode));
+			"Got " + codeUnit.toString() + " for " + hexFormat.formatHex(bytes));
 
 		assertEquals(1, codeUnit.getLength(), "Wrong data length.");
 	}
@@ -578,9 +579,10 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		stream.write(0x02);
 		stream.write(0x03);
 
-		CodeUnit codeUnit = disassemble(stream.toByteArray());
+		byte[] bytes = stream.toByteArray();
+		CodeUnit codeUnit = disassemble(bytes);
 		assertTrue(codeUnit instanceof Instruction,
-			"Got " + codeUnit.toString() + " for " + Arrays.toString(opCode));
+			"Got " + codeUnit.toString() + " for " + hexFormat.formatHex(bytes));
 
 		assertTrue(codeUnit.getLength() >= opCode.length,
 			"Instruction too short: " + codeUnit.toString());

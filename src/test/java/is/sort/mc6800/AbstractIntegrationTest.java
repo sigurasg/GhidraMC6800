@@ -17,6 +17,7 @@ package is.sort.mc6800;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HexFormat;
 import java.util.Map;
 
 import generic.jar.ResourceFile;
@@ -71,4 +72,6 @@ public abstract class AbstractIntegrationTest extends AbstractGenericTest {
 
 	protected final Language language;
 	protected final ProgramDB program;
+	protected final HexFormat hexFormat =
+		HexFormat.ofDelimiter(", ").withPrefix("0x").withUpperCase();
 }
