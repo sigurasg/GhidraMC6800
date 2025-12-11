@@ -14,12 +14,6 @@
 
 package is.sort.mc6800;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 
 public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
@@ -359,32 +353,9 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 		}
 	}
 
-	private void assertInvaldOpcodes(Integer[] invalidOpcodes) {
-		for (int opcode : invalidOpcodes) {
-			assertInvalidOpcode(opcode);
-		}
-	}
-
 	private void assertValidOpcodes(int prefix, Integer[] validOpcodes) {
 		for (int opcode : validOpcodes) {
 			assertValidOpcode(prefix, opcode);
 		}
-	}
-
-	private void assertValidOpcodes(Integer[] validOpcodes) {
-		for (int opcode : validOpcodes) {
-			assertValidOpcode(opcode);
-		}
-	}
-
-	Integer[] complementOpcodes(Integer[] opcodes) {
-		Set<Integer> validSet = new HashSet<>(Arrays.asList(opcodes));
-		Set<Integer> complementSet = new HashSet<>();
-		for (int opcode = 0x00; opcode < 0x100; opcode++) {
-			if (!validSet.contains(opcode)) {
-				complementSet.add(opcode);
-			}
-		}
-		return complementSet.toArray(new Integer[complementSet.size()]);
 	}
 }

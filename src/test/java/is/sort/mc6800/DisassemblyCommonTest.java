@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -582,6 +584,29 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 
 		assertTrue(codeUnit.getLength() >= opCode.length,
 			"Instruction too short: " + codeUnit.toString());
+	}
+
+	protected void assertValidOpcodes(Integer[] validOpcodes) {
+		for (int opcode : validOpcodes) {
+			assertValidOpcode(opcode);
+		}
+	}
+
+	protected void assertInvaldOpcodes(Integer[] invalidOpcodes) {
+		for (int opcode : invalidOpcodes) {
+			assertInvalidOpcode(opcode);
+		}
+	}
+
+	protected Integer[] complementOpcodes(Integer[] opcodes) {
+		Set<Integer> validSet = new HashSet<>(Arrays.asList(opcodes));
+		Set<Integer> complementSet = new HashSet<>();
+		for (int opcode = 0x00; opcode < 0x100; opcode++) {
+			if (!validSet.contains(opcode)) {
+				complementSet.add(opcode);
+			}
+		}
+		return complementSet.toArray(new Integer[complementSet.size()]);
 	}
 
 	protected void assertDisassemblesAt(String expected, int addr, int... code) {
