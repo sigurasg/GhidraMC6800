@@ -20,6 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -536,10 +539,76 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		assertDisassemblesTo("WAI", 0x3E);
 	}
 
-	protected void assertInvalidOpcode(int opCode) {
-		byte[] code = new byte[] { (byte) opCode, (byte) 0x12, (byte) 0x34 };
-		CodeUnit codeUnit = disassemble(code);
+	protected void assertInvalidExactOpcode(int... opCode) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		for (int arg : opCode) {
+			stream.write(arg);
+		}
+		CodeUnit codeUnit = disassemble(stream.toByteArray());
 		assertTrue(codeUnit instanceof Data);
+		assertEquals(opCode.length, codeUnit.getLength(), "Wrong data length.");
+	}
+
+	protected void assertInvalidOpcode(int... opCode) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		for (int arg : opCode) {
+			stream.write(arg);
+		}
+		// Extend the invalid opcode with extra bytes to verify that
+		// the disassembler does not try to use them.
+		stream.write(0x01);
+		stream.write(0x02);
+		stream.write(0x03);
+
+		byte[] bytes = stream.toByteArray();
+		CodeUnit codeUnit = disassemble(bytes);
+		assertTrue(codeUnit instanceof Data,
+			"Got " + codeUnit.toString() + " for " + hexFormat.formatHex(bytes));
+
+		assertEquals(1, codeUnit.getLength(), "Wrong data length.");
+	}
+
+	protected void assertValidOpcode(int... opCode) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		for (int arg : opCode) {
+			stream.write(arg);
+		}
+		// Extend the valid opcode with extra bytes in case
+		// the instruction has an argument.
+		stream.write(0x01);
+		stream.write(0x02);
+		stream.write(0x03);
+
+		byte[] bytes = stream.toByteArray();
+		CodeUnit codeUnit = disassemble(bytes);
+		assertTrue(codeUnit instanceof Instruction,
+			"Got " + codeUnit.toString() + " for " + hexFormat.formatHex(bytes));
+
+		assertTrue(codeUnit.getLength() >= opCode.length,
+			"Instruction too short: " + codeUnit.toString());
+	}
+
+	protected void assertValidOpcodes(Integer[] validOpcodes) {
+		for (int opcode : validOpcodes) {
+			assertValidOpcode(opcode);
+		}
+	}
+
+	protected void assertInvaldOpcodes(Integer[] invalidOpcodes) {
+		for (int opcode : invalidOpcodes) {
+			assertInvalidOpcode(opcode);
+		}
+	}
+
+	protected Integer[] complementOpcodes(Integer[] opcodes) {
+		Set<Integer> validSet = new HashSet<>(Arrays.asList(opcodes));
+		Set<Integer> complementSet = new HashSet<>();
+		for (int opcode = 0x00; opcode < 0x100; opcode++) {
+			if (!validSet.contains(opcode)) {
+				complementSet.add(opcode);
+			}
+		}
+		return complementSet.toArray(new Integer[complementSet.size()]);
 	}
 
 	protected void assertDisassemblesAt(String expected, int addr, int... code) {
@@ -552,10 +621,10 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		CodeUnit codeUnit = disassembleAt(addr, bytes);
 
 		assertNotNull(codeUnit);
-		assertTrue(codeUnit instanceof Instruction);
+		assertTrue(codeUnit instanceof Instruction, "Not an instruction");
 
-		assertEquals(bytes.length, codeUnit.getLength());
 		assertEquals(expected, codeUnit.toString());
+		assertEquals(bytes.length, codeUnit.getLength(), "Wrong instruction length.");
 	}
 
 	protected void assertDisassemblesTo(String expected, int... code) {
@@ -588,4 +657,3 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		return disassembleAt(0, bytes);
 	}
 }
-

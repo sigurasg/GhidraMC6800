@@ -22,50 +22,20 @@ public class DisassemblyMC6801Test extends DisassemblyMC6801CommonTest {
 	}
 
 	@Test
-	public void InvalidOpCodes() {
-		assertInvalidOpcode(0x00);
-		assertInvalidOpcode(0x02);
-		assertInvalidOpcode(0x03);
+	public void ValidInvalidOpCodes() {
+		Integer[] invalidOpcodes = {
+			0x00, 0x02, 0x03,
+			0x12, 0x13, 0x14, 0x15, 0x18,
+			0x1A, 0x1C, 0x1D, 0x1E, 0x1F,
+			0x41, 0x42, 0x45, 0x4B, 0x4E,
+			0x51, 0x52, 0x55, 0x5B, 0x5E,
+			0x61, 0x62, 0x65, 0x6B,
+			0x71, 0x72, 0x75, 0x7B,
+			0x87, 0x8F,
+			0xC7, 0xCD, 0xCF
+		};
 
-		assertInvalidOpcode(0x12);
-		assertInvalidOpcode(0x13);
-		assertInvalidOpcode(0x14);
-		assertInvalidOpcode(0x15);
-		assertInvalidOpcode(0x18);
-
-		assertInvalidOpcode(0x1A);
-		assertInvalidOpcode(0x1C);
-		assertInvalidOpcode(0x1D);
-		assertInvalidOpcode(0x1E);
-		assertInvalidOpcode(0x1F);
-
-		assertInvalidOpcode(0x41);
-		assertInvalidOpcode(0x42);
-		assertInvalidOpcode(0x45);
-		assertInvalidOpcode(0x4B);
-		assertInvalidOpcode(0x4E);
-
-		assertInvalidOpcode(0x51);
-		assertInvalidOpcode(0x52);
-		assertInvalidOpcode(0x55);
-		assertInvalidOpcode(0x5B);
-		assertInvalidOpcode(0x5E);
-
-		assertInvalidOpcode(0x61);
-		assertInvalidOpcode(0x62);
-		assertInvalidOpcode(0x65);
-		assertInvalidOpcode(0x6B);
-
-		assertInvalidOpcode(0x71);
-		assertInvalidOpcode(0x72);
-		assertInvalidOpcode(0x75);
-		assertInvalidOpcode(0x7B);
-
-		assertInvalidOpcode(0x87);
-		assertInvalidOpcode(0x8F);
-
-		assertInvalidOpcode(0xC7);
-		assertInvalidOpcode(0xCD);
-		assertInvalidOpcode(0xCF);
+		assertInvaldOpcodes(invalidOpcodes);
+		assertValidOpcodes(complementOpcodes(invalidOpcodes));
 	}
 }
