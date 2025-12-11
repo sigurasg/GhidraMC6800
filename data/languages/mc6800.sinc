@@ -28,15 +28,10 @@ define register offset=0x00 size=2 [ D ];
 @endif
 
 # 16-bit registers:
- #    PC: Program counter
- #    S:  Stack pointer
- #    X: IX index register
-#    Y: IY index register (MC68HC11)
-@ifdef HAS_Y_REGISTER
-define register offset=0x10 size=2 [ PC S X Y];
-@else
-define register offset=0x10 size=2 [ PC S X ];
-@endif
+#    PC: Program counter
+#    S:  Stack pointer
+#    X: IX index register
+define register offset=0x10 size=2 [ PC X S ];
 
 # Status bits in CC.
 define bitrange
