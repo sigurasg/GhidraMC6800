@@ -267,11 +267,38 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 	}
 
 	@Test
-	public void PULX() {
+	public void PULY() {
 		assertDisassemblesTo("PULY", 0x18, 0x38);
 	}
 
 	// Test 68HC11 specific instructions.
+	@Test
+	public void TEST() {
+		assertDisassemblesTo("TEST", 0x00);
+	}
+
+	@Test
+	public void IDIV() {
+		assertDisassemblesTo("IDIV", 0x02);
+	}
+
+	@Test
+	public void FDIV() {
+		assertDisassemblesTo("FDIV", 0x03);
+	}
+
+	@Test
+	public void BRSET() {
+		assertDisassemblesTo("BRSET 0x0012 0x23 0x0038", 0x12, 0x12, 0x23, 0x34);
+		// What's up with this?
+		assertDisassemblesTo("BRSET 0x12,Y 0x23 0x0039", 0x18, 0x1E, 0x12, 0x23, 0x34);
+		assertDisassemblesTo("BRSET 0x12,X 0x23 0x0038", 0x1E, 0x12, 0x23, 0x34);
+	}
+
+	@Test
+	public void BRCLR() {
+	}
+	
 	@Test
 	public void CPD() {
 		assertDisassemblesTo("CPD #0x1234", 0x1A, 0x83, 0x12, 0x34);
@@ -285,6 +312,16 @@ public class DisassemblyMC68HC11Test extends DisassemblyMC6801CommonTest {
 	public void CPX() {
 		super.CPX();
 		assertDisassemblesTo("CPX 0x12,Y", 0xCD, 0xAC, 0x12);
+	}
+
+	public void LDX() {
+		super.LDX();
+		assertDisassemblesTo("LDX 0x12,Y", 0xCD, 0xEE, 0x12);
+	}
+
+	public void STX() {
+		super.STX();
+		assertDisassemblesTo("STX 0x12,Y", 0xCD, 0xEF, 0x12);
 	}
 
 	@Test
