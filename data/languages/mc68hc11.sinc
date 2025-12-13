@@ -364,21 +364,20 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
     C = (den == 0);
 }
 
-# TODO(siggi): These are 3-4 byte dual operand instruction!!!
-:BRSET OP1,imm8     is (op=0x12 | op=0x1E); OP1; imm8
+:BRSET OP1 imm8 REL is (op=0x12 | op=0x1E); OP1; imm8; REL
 {
     # TODO(siggi): Implement
 }
-:BRSET OP1Y,imm8     is op=0x18; op=0x1E; OP1Y; imm8
+:BRSET OP1Y imm8 REL is op=0x18; op=0x1E; OP1Y; imm8; REL
 {
     # TODO(siggi): Implement
 }
 
-:BRCLR OP1,imm8     is (op=0x13 | op=0x1F); OP1; imm8
+:BRCLR OP1 imm8 REL is (op=0x13 | op=0x1F); OP1; imm8; REL
 {
     # TODO(siggi): Implement
 }
-:BRCLR OP1Y,imm8     is op=0x18; op=0x1F; OP1Y; imm8
+:BRCLR OP1Y imm8 REL is op=0x18; op=0x1F; OP1Y; imm8; REL
 {
     # TODO(siggi): Implement
 }
