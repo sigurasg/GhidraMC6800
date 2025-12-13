@@ -24,7 +24,8 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
     }
 
     // TODO(siggi): Test Y register addressing mode.
-
+    // TODO(siggi): Test BRSET/BRCLR instructions.
+    
     @Test
     public void IDIV() {
         assemble(0x0000, "IDIV");

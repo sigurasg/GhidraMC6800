@@ -406,17 +406,25 @@ MASK: imm8          is imm8 {
         goto REL;
 }
 
-:BSET   OP1         is (op=0x14 | op=0x1C) ... & OP1 {
+:BSET   OP1 MASK    is op=0x14 ... & OP1; MASK {
     # TODO(siggi): Implement
 }
-:BSET   OP1Y        is op=0x18; op=0x1C ... & OP1Y {
+# This opcode has the wrong addrMode for OP1.
+:BSET imm8,X MASK is op=0x1C & X; imm8; MASK {
+    # TODO(siggi): Implement
+}
+:BSET   OP1Y MASK   is op=0x18; op=0x1C ... & OP1Y; MASK {
     # TODO(siggi): Implement
 }
 
-:BCLR   OP1         is (op=0x15 | op=0x1D) ... & OP1; imm8 {
+:BCLR   OP1 MASK    is op=0x15 ... & OP1; MASK {
     # TODO(siggi): Implement
 }
-:BCLR   OP1Y        is op=0x18; op=0x1D ... & OP1Y; imm8 {
+# This opcode has the wrong addrMode for OP1.
+:BCLR imm8,X MASK is op=0x1D & X; imm8; MASK {
+    # TODO(siggi): Implement
+}
+:BCLR   OP1Y MASK   is op=0x18; op=0x1D ... & OP1Y; MASK {
     # TODO(siggi): Implement
 }
 
