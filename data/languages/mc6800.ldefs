@@ -52,7 +52,18 @@
             slafile="hd6301.sla"
             processorspec="mc6801.pspec"
             id="HD6301:BE:16:default">
-    <description>MC6801 Microprocessor</description>
+    <description>HD6301 Microprocessor</description>
+    <compiler name="default" spec="mc6800.cspec" id="default"/>
+  </language>
+  <language processor="MC68HC11"
+            endian="big"
+            size="16"
+            variant="default"
+            version="1.0"
+            slafile="mc68hc11.sla"
+            processorspec="mc6801.pspec"
+            id="MC68HC11:BE:16:default">
+    <description>MC68HC11 Microprocessor</description>
     <compiler name="default" spec="mc6800.cspec" id="default"/>
   </language>
 </language_definitions>

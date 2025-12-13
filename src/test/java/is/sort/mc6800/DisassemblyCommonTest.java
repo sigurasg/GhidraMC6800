@@ -578,6 +578,7 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		stream.write(0x01);
 		stream.write(0x02);
 		stream.write(0x03);
+		stream.write(0x04);
 
 		byte[] bytes = stream.toByteArray();
 		CodeUnit codeUnit = disassemble(bytes);
