@@ -24,6 +24,12 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
     export *:2 tmp;
 }
 
+MASK: imm8          is imm8 {
+    local tmp:1 = imm8;
+    export tmp;
+}
+
+
 # The 6800 instructions with imm,Y address mode.
 
 :NEG OP1Y    is op=0x18; op=0x60 ... & OP1Y
@@ -364,25 +370,39 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
     C = (den == 0);
 }
 
-:BRSET OP1 imm8 REL is (op=0x12 | op=0x1E) ... & OP1; imm8; REL
+:BRSET OP1 MASK REL is op=0x12 ... & OP1; MASK; REL
 {
-    if ((OP1 & imm8:1) != 0)
+    if ((OP1 & MASK) != 0)
         goto REL;
 }
-:BRSET OP1Y imm8 REL is op=0x18; op=0x1E ... & OP1Y; imm8; REL
+# This opcode has the wrong addrMode for OP1.
+:BRSET imm8,X MASK REL is op=0x1E & X; imm8; MASK; REL
 {
-    if ((OP1Y & imm8:1) != 0)
+    local tmp:2 = imm8 + X;
+    if ((*tmp & MASK) != 0)
+        goto REL;
+}
+:BRSET OP1Y MASK REL is op=0x18; op=0x1E ... & OP1Y; MASK; REL
+{
+    if ((OP1Y & MASK) != 0)
         goto REL;
 }
 
-:BRCLR OP1 imm8 REL is (op=0x13 | op=0x1F) ... & OP1; imm8; REL
+:BRCLR OP1 MASK REL is op=0x13 ... & OP1; MASK; REL
 {
-    if ((OP1 & imm8:1) == 0)
+    if ((OP1 & MASK) == 0)
         goto REL;
 }
-:BRCLR OP1Y imm8 REL is op=0x18; op=0x1F ... & OP1Y; imm8; REL
+# This opcode has the wrong addrMode for OP1.
+:BRCLR imm8,X MASK REL is op=0x1F & X; imm8; MASK; REL
 {
-    if ((OP1Y & imm8:1) == 0)
+    local tmp:2 = imm8 + X;
+    if ((*tmp & MASK) == 0)
+        goto REL;
+}
+:BRCLR OP1Y MASK REL is op=0x18; op=0x1F ... & OP1Y; MASK; REL
+{
+    if ((OP1Y & MASK:1) == 0)
         goto REL;
 }
 
