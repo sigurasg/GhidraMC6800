@@ -407,25 +407,27 @@ MASK: imm8          is imm8 {
 }
 
 :BSET   OP1 MASK    is op=0x14 ... & OP1; MASK {
-    # TODO(siggi): Implement
+    OP1 = OP1 | MASK;
 }
 # This opcode has the wrong addrMode for OP1.
 :BSET imm8,X MASK is op=0x1C & X; imm8; MASK {
-    # TODO(siggi): Implement
+    local tmp:2 = imm8 + X;
+    *tmp = *tmp | MASK;
 }
 :BSET   OP1Y MASK   is op=0x18; op=0x1C ... & OP1Y; MASK {
-    # TODO(siggi): Implement
+    OP1Y = OP1Y | MASK;
 }
 
 :BCLR   OP1 MASK    is op=0x15 ... & OP1; MASK {
-    # TODO(siggi): Implement
+    OP1 = OP1 & ~MASK;
 }
 # This opcode has the wrong addrMode for OP1.
 :BCLR imm8,X MASK is op=0x1D & X; imm8; MASK {
-    # TODO(siggi): Implement
+    local tmp:2 = imm8 + X;
+    *tmp = *tmp & ~MASK;
 }
 :BCLR   OP1Y MASK   is op=0x18; op=0x1D ... & OP1Y; MASK {
-    # TODO(siggi): Implement
+    OP1Y = OP1Y & ~MASK;
 }
 
 :XGDX               is op=0x8F {
