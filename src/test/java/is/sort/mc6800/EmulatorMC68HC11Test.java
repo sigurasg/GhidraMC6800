@@ -52,4 +52,36 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
         assertEquals(getD(), 0);
         assertEquals(getCC(), CC.Z);
     }
+
+    @Test
+    public void FDIV() {
+        assemble(0x0000, "FDIV");
+
+        // Divide by zero.
+        setD(0xFFFF);
+        setX(0x0000);
+        setCC(CC.V);
+        stepFrom(0x0000);
+        assertEquals(getX(), 0xFFFF);
+        assertEquals(getCC(), CC.C);
+
+        /* TODO(siggi): Writeme!
+        // Normal divide.
+        setD(0x1234);
+        setX(0x0011);
+        stepFrom(0x0000);
+        assertEquals(getX(), 0x1234 / 0x0011);
+        assertEquals(getD(), 0x1234 % 0x0011);
+        assertEquals(getCC(), 0x00);
+
+        // Zero result.
+        // Normal divide.
+        setD(0x0000);
+        setX(0x0011);
+        stepFrom(0x0000);
+        assertEquals(getX(), 0);
+        assertEquals(getD(), 0);
+        assertEquals(getCC(), CC.Z);
+        */
+    }
 }

@@ -333,7 +333,35 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
 }
 
 :FDIV       is op=0x03 {
-    # TODO(siggi): Implement
+    local num:4 = zext(D);
+    local den:4 = zext(X);
+
+    V = 0;
+
+    if (den == 0)
+        goto <divByZero>;
+
+    if (den <= num)
+        goto <overflow>;
+
+    local extNum:4 = num << 16;
+    local tmp:4;
+    tmp = extNum / den;
+    X = tmp:2;
+
+    tmp = extNum % den;
+    D = tmp:2;
+    goto <setFlags>;
+
+    <overflow>
+    V = 1;
+
+    <divByZero>
+    X = 0xFFFF;
+
+    <setFlags>
+    Z = (X == 0);
+    C = (den == 0);
 }
 
 # TODO(siggi): These are 3-4 byte dual operand instruction!!!
