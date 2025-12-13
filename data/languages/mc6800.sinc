@@ -33,7 +33,7 @@ define register offset=0x00 size=2 [ D ];
  #    X: IX index register
 #    Y: IY index register (MC68HC11)
 @ifdef HAS_Y_REGISTER
-define register offset=0x10 size=2 [ PC S X Y];
+define register offset=0x10 size=2 [ PC S X Y ];
 @else
 define register offset=0x10 size=2 [ PC S X ];
 @endif
@@ -69,7 +69,7 @@ attach variables acc_4 [ A B ];
 # Constructors
 ################################################################
 
-REL:  addr    is simm8  [ addr = inst_next + simm8;  ]   { export *:2 addr; }
+REL:  addr    is simm8  [ addr = inst_next + simm8; ]   { export *:2 addr; }
 
 # 1-byte operand, immediate/direct/indexed/extended addressing mode
 OP1: "#"imm8    is addrMode=0; imm8
@@ -550,8 +550,7 @@ macro PushEntireState()
 
 :JMP EA2    is (op=0x6E | op=0x7E) ... & EA2
 {
-    local target:2 = EA2;
-    goto [target];
+    goto [EA2];
 }
 
 :CLR^acc_4    is (op=0x4F | op=0x5F) & acc_4
@@ -780,7 +779,7 @@ macro PushEntireState()
     PushEntireState();
     I = 1;
     tmp:2 = $(SWI_VECTOR);
-    call[tmp];
+    call [tmp];
 }
 
 ################################################################
@@ -929,8 +928,7 @@ macro PushEntireState()
 {
     local addr:2 = inst_next;
     Push2(S, addr);
-    local target:2 = EA2;
-    call [target];
+    call [EA2];
 }
 
 :LDS OP2    is (op=0x8E | op=0x9E | op=0xAE | op=0xBE) ... & OP2
