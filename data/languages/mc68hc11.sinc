@@ -313,7 +313,23 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
 }
 
 :IDIV       is op=0x02 {
-    # TODO(siggi): Implement
+    local num:2 = D;
+    local den:2 = X;
+
+    if (den == 0)
+        goto <divByZero>;
+
+    X = num / den;
+    D = num % den;
+    goto <setFlags>;
+
+    <divByZero>
+    X = 0xFFFF;
+
+    <setFlags>
+    Z = (X == 0);
+    V = 0;
+    C = (den == 0);
 }
 
 :FDIV       is op=0x03 {
@@ -402,17 +418,3 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
 :STX OP2Y   is op=0xCD; op=0xEF ... & OP2Y {
     storeRegister(X, OP2Y);
 }
-
-@if 0
-# Missing instructions:
-# - FDIV
-# - IDIV
-# - BCLR
-# - BSET
-# - BRCLR
-# - BRSET
-# - XGDX
-# - XGDY
-# - STOP
-# - TEST
-@endif
