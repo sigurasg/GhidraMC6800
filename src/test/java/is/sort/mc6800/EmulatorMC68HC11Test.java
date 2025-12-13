@@ -23,6 +23,8 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
         super("MC68HC11:BE:16:default");
     }
 
+    // TODO(siggi): Test Y register addressing mode.
+
     @Test
     public void IDIV() {
         assemble(0x0000, "IDIV");
@@ -65,23 +67,27 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
         assertEquals(getX(), 0xFFFF);
         assertEquals(getCC(), CC.C);
 
-        /* TODO(siggi): Writeme!
-        // Normal divide.
+        // Overflow.
         setD(0x1234);
-        setX(0x0011);
+        setX(0x1233);
         stepFrom(0x0000);
-        assertEquals(getX(), 0x1234 / 0x0011);
-        assertEquals(getD(), 0x1234 % 0x0011);
-        assertEquals(getCC(), 0x00);
+        assertEquals(getX(), 0xFFFF);
+        assertEquals(getCC(), CC.V);
 
         // Zero result.
-        // Normal divide.
         setD(0x0000);
         setX(0x0011);
         stepFrom(0x0000);
         assertEquals(getX(), 0);
         assertEquals(getD(), 0);
         assertEquals(getCC(), CC.Z);
-        */
+
+        // Normal divide.
+        setD(0x1234);
+        setX(0x1235);
+        stepFrom(0x0000);
+        assertEquals(getX(), (0x1234 << 16) / 0x1235);
+        assertEquals(getD(), (0x1234 << 16) % 0x1235);
+        assertEquals(getCC(), 0x00);
     }
 }
