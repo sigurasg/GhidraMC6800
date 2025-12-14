@@ -232,10 +232,11 @@ macro test(op)
 
 macro clear(op)
 {
-    V = 0;
     op = 0;
-    Z = 1;
     N = 0;
+    Z = 1;
+    V = 0;
+    C = 0;
 }
 
 macro addition(reg, op)
