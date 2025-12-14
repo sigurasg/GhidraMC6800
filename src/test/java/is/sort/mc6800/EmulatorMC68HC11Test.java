@@ -26,13 +26,6 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
     // TODO(siggi): Test Y instructions.
     // TODO(siggi): Test BRSET/BRCLR instructions.
     // TODO(siggi): Test BSET/BCLR instructions.
-    //
-    // NOTE: As of this test implementation, some Y-indexed addressing mode tests fail due to
-    // emulator implementation issues:
-    // - CLR Y sets C flag when it shouldn't (expected Z=4, got Z|C=5)
-    // - CPY Y sets C flag incorrectly (expected N=8, got N|C=9)
-    // - JMP Y, JSR Y, LDS Y return 0 (likely not implemented in emulator)
-    // Most other Y-indexed tests (27/32) pass successfully.
 
     @Test
     public void LDA_Y() {
