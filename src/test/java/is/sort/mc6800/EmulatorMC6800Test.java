@@ -130,4 +130,5 @@ public class EmulatorMC6800Test extends AbstractEmulatorTest {
 		stepFrom(0x0120, 2);
 		assertNotEquals(getPC(), 0x0130);
 	}
+
 }

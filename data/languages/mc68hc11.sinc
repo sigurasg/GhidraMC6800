@@ -24,9 +24,21 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
     export *:2 tmp;
 }
 
+EA2Y: imm8,Y      is addrMode=2 & Y; imm8
+{
+    local tmp:2 = Y + imm8;
+    export tmp;
+}
+
 MASK: imm8          is imm8 {
     local tmp:1 = imm8;
     export tmp;
+}
+
+OP1X: imm8,X  is addrMode & X; imm8
+{
+    local tmp:2 = imm8 + X;
+    export *:1 tmp;
 }
 
 
@@ -82,23 +94,21 @@ MASK: imm8          is imm8 {
     test(OP1Y);
 }
 
-:JMP OP2Y    is op=0x18; op=0x6E ... & OP2Y
+:JMP EA2Y    is op=0x18; op=0x6E ... & EA2Y
 {
-    local target:2 = OP2Y;
-    goto [target];
+    goto [EA2Y];
 }
 
-:JSR OP2Y    is op=0x18; op=0xAD ... & OP2Y
+:JSR EA2Y    is op=0x18; op=0xAD ... & EA2Y
 {
     local addr:2 = inst_next;
     Push2(S, addr);
-    local target:2 = OP2Y;
-    call [target];
+    call [EA2Y];
 }
 
 :LDS OP2Y    is op=0x18; op=0xAE ... & OP2Y
 {
-    storeRegister(Y, OP2Y);
+    loadRegister(S, OP2Y);
 }
 
 :STS OP2Y    is op=0x18; op=0xAF ... & OP2Y
@@ -376,10 +386,9 @@ MASK: imm8          is imm8 {
         goto REL;
 }
 # This opcode has the wrong addrMode for OP1.
-:BRSET imm8,X MASK REL is op=0x1E & X; imm8; MASK; REL
+:BRSET OP1X MASK REL is op=0x1E ... & OP1X; MASK; REL
 {
-    local tmp:2 = imm8 + X;
-    if ((*tmp & MASK) != 0)
+    if ((OP1X & MASK) != 0)
         goto REL;
 }
 :BRSET OP1Y MASK REL is op=0x18; op=0x1E ... & OP1Y; MASK; REL
@@ -394,10 +403,9 @@ MASK: imm8          is imm8 {
         goto REL;
 }
 # This opcode has the wrong addrMode for OP1.
-:BRCLR imm8,X MASK REL is op=0x1F & X; imm8; MASK; REL
+:BRCLR OP1X MASK REL is op=0x1F ... & OP1X ; MASK; REL
 {
-    local tmp:2 = imm8 + X;
-    if ((*tmp & MASK) == 0)
+    if ((OP1X & MASK) == 0)
         goto REL;
 }
 :BRCLR OP1Y MASK REL is op=0x18; op=0x1F ... & OP1Y; MASK; REL
@@ -410,9 +418,8 @@ MASK: imm8          is imm8 {
     OP1 = OP1 | MASK;
 }
 # This opcode has the wrong addrMode for OP1.
-:BSET imm8,X MASK is op=0x1C & X; imm8; MASK {
-    local tmp:2 = imm8 + X;
-    *tmp = *tmp | MASK;
+:BSET OP1X MASK is op=0x1C ... & OP1X; MASK {
+    OP1X = OP1X | MASK;
 }
 :BSET   OP1Y MASK   is op=0x18; op=0x1C ... & OP1Y; MASK {
     OP1Y = OP1Y | MASK;
@@ -422,9 +429,8 @@ MASK: imm8          is imm8 {
     OP1 = OP1 & ~MASK;
 }
 # This opcode has the wrong addrMode for OP1.
-:BCLR imm8,X MASK is op=0x1D & X; imm8; MASK {
-    local tmp:2 = imm8 + X;
-    *tmp = *tmp & ~MASK;
+:BCLR OP1X MASK is op=0x1D ... & OP1X; MASK {
+    OP1X = OP1X & ~MASK;
 }
 :BCLR   OP1Y MASK   is op=0x18; op=0x1D ... & OP1Y; MASK {
     OP1Y = OP1Y & ~MASK;

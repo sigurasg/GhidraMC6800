@@ -95,6 +95,10 @@ public abstract class AbstractEmulatorTest extends AbstractIntegrationTest {
 		emulator.writeRegister("X", value);
 	}
 
+	protected void setY(int value) {
+		emulator.writeRegister("Y", value);
+	}
+
 	protected void setS(int value) {
 		emulator.writeRegister("S", value);
 	}
@@ -121,6 +125,10 @@ public abstract class AbstractEmulatorTest extends AbstractIntegrationTest {
 
 	protected int getX() {
 		return emulator.readRegister("X").intValue();
+	}
+
+	protected int getY() {
+		return emulator.readRegister("Y").intValue();
 	}
 
 	protected int getS() {
