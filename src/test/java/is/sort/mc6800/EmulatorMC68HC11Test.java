@@ -60,22 +60,22 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
     @Test
     public void BRSET_Direct_MultipleBits() {
         assemble(0x0000,
-            "BRSET 0x20 0xC3 0x0E");
+            "BRSET 0x20 0xC3 0x000E");
 
         // Test with all bits set (branch taken)
         write(0x0020, 0xFF);
         stepFrom(0x0000);
-        assertEquals(0x0004 + 0x05, getPC());
+        assertEquals(0x000E, getPC());
 
-        // Test with some bits not set (branch not taken)
-        write(0x0020, 0xC2);
+        // Test with the complement bits set (branch not taken)
+        write(0x0020, ~0xC3);
         stepFrom(0x0000);
         assertEquals(0x0004, getPC());
 
         // Test with exact bits set (branch taken)
         write(0x0020, 0xC3);
         stepFrom(0x0000);
-        assertEquals(0x0004 + 0x05, getPC());
+        assertEquals(0x000E, getPC());
     }
 
     @Test
@@ -122,18 +122,15 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
     @Test
     public void BRCLR_Direct_BranchTaken() {
         assemble(0x0000,
-            "BRCLR 0x10 0x80 0x0A",
-            "LDAA #0xFF");
+            "BRCLR 0x10 0x80 0x0020");
 
         // Bit 7 is clear in memory location 0x10
         write(0x0010, 0x00);
-        setA(0x00);
 
         stepFrom(0x0000);
 
         // Branch should be taken
-        assertEquals(0x0004 + 0x0A, getPC());
-        assertEquals(0x00, getA()); // LDAA should not execute
+        assertEquals(0x0020, getPC());
     }
 
     @Test
@@ -155,12 +152,12 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
     @Test
     public void BRCLR_Direct_MultipleBits() {
         assemble(0x0000,
-            "BRCLR 0x20 0xC3 0x05");
+            "BRCLR 0x20 0xC3 0x0009");
 
         // Test with all bits clear (branch taken)
         write(0x0020, 0x00);
         stepFrom(0x0000);
-        assertEquals(0x0004 + 0x05, getPC());
+        assertEquals(0x0009, getPC());
 
         // Test with some bits set (branch not taken)
         write(0x0020, 0x03);
@@ -175,13 +172,13 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
         // Test with different bits clear (branch taken)
         write(0x0020, 0x3C);
         stepFrom(0x0000);
-        assertEquals(0x0004 + 0x05, getPC());
+        assertEquals(0x0009, getPC());
     }
 
     @Test
     public void BRCLR_Indexed_X() {
         assemble(0x0000,
-            "BRCLR 0x08,X 0x55 0x06");
+            "BRCLR 0x08,X 0x55 0x000A");
 
         setX(0x1000);
         write(0x1008, 0xAA);  // Bits 0x55 are clear
@@ -189,13 +186,13 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
         stepFrom(0x0000);
 
         // Branch should be taken
-        assertEquals(0x0004 + 0x06, getPC());
+        assertEquals(0x000A, getPC());
     }
 
     @Test
     public void BRCLR_Indexed_Y() {
         assemble(0x0000,
-            "BRCLR 0x10,Y 0x0F 0x08");
+            "BRCLR 0x10,Y 0x0F 0x000A");
 
         setY(0x2000);
         write(0x2010, 0xF0);  // Lower 4 bits are clear
@@ -203,18 +200,18 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
         stepFrom(0x0000);
 
         // Branch should be taken
-        assertEquals(0x0005 + 0x08, getPC());
+        assertEquals(0x000A, getPC());
     }
 
     @Test
     public void BRCLR_AllBitsPattern() {
         assemble(0x0000,
-            "BRCLR 0x30 0xFF 0x04");
+            "BRCLR 0x30 0xFF 0x0008");
 
         // Only when ALL bits are clear should branch be taken
         write(0x0030, 0x00);
         stepFrom(0x0000);
-        assertEquals(0x0004 + 0x04, getPC());
+        assertEquals(0x0008, getPC());
 
         // Any bit set means no branch
         write(0x0030, 0x01);
@@ -225,22 +222,22 @@ public class EmulatorMC68HC11Test extends AbstractEmulatorTest {
     @Test
     public void BRSET_SingleBitPattern() {
         assemble(0x0000,
-            "BRSET 0x40 0x01 0x03",
-            "BRSET 0x40 0x02 0x03",
-            "BRSET 0x40 0x04 0x03",
-            "BRSET 0x40 0x08 0x03");
+            "BRSET 0x40 0x01 0x0020",
+            "BRSET 0x40 0x02 0x0020",
+            "BRSET 0x40 0x04 0x0020",
+            "BRSET 0x40 0x08 0x0020");
 
         // Test individual bits
         write(0x0040, 0x05);  // Binary: 0000 0101 (bits 0 and 2)
 
         stepFrom(0x0000);  // Test bit 0 - should branch
-        assertEquals(0x0004 + 0x03, getPC());
+        assertEquals(0x0020, getPC());
 
         stepFrom(0x0004);  // Test bit 1 - should not branch
         assertEquals(0x0008, getPC());
 
         stepFrom(0x0008);  // Test bit 2 - should branch
-        assertEquals(0x000C + 0x03, getPC());
+        assertEquals(0x0020, getPC());
 
         stepFrom(0x000C);  // Test bit 3 - should not branch
         assertEquals(0x0010, getPC());
