@@ -18,13 +18,23 @@ import ghidra.app.services.AbstractAnalyzer;
 import ghidra.app.services.AnalyzerType;
 import ghidra.app.util.importer.MessageLog;
 import ghidra.program.model.address.AddressSetView;
-import ghidra.program.model.lang.LanguageID;
 import ghidra.program.model.listing.Program;
 import ghidra.util.exception.CancelledException;
 import ghidra.util.task.TaskMonitor;
 
+/**
+ * An analyzer that makes sure JSR instructions reference the called function
+ * as a primary reference.
+ *
+ * When Ghidra can infer the value of the stack pointer, the JSR instruction
+ * will have two references.
+ *  1. A write reference to the location in stack where the return address is stored.
+ *  2. A call reference to the called function.
+ *
+ * By default Ghidra marks the write reference as primary, this analyzer
+ * changes that to make the call reference primary.
+*/
 public class MC6800JSRAnalyzer extends AbstractAnalyzer {
-
     public MC6800JSRAnalyzer() {
         super("MC6800 JSR Analyzer",
             "Makes sure JSR instructions reference the called function as a primary reference",
