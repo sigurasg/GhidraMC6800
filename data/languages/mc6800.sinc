@@ -925,11 +925,19 @@ macro PushEntireState()
     call REL;
 }
 
-:JSR EA2    is (op=0xAD | op=0xBD) ... & EA2
+:JSR EA2    is op=0xAD ... & EA2
 {
     local addr:2 = inst_next;
     Push2(S, addr);
     call [EA2];
+}
+
+:JSR imm16    is op=0xBD; imm16
+{
+    local retAddr:2 = inst_next;
+    Push2(S, retAddr);
+    local dst:2 = imm16;
+    call [dst];
 }
 
 :LDS OP2    is (op=0x8E | op=0x9E | op=0xAE | op=0xBE) ... & OP2
