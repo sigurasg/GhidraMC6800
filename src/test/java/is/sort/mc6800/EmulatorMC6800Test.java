@@ -131,4 +131,22 @@ public class EmulatorMC6800Test extends AbstractEmulatorTest {
 		assertNotEquals(getPC(), 0x0130);
 	}
 
+	@Test
+	public void JSR() throws Exception {
+		// This is an indirect test of the Push2 macro in the language spec.
+		assemble(0x0200,
+			"JSR 0x0300");
+
+		setS(0x07FF);
+		stepFrom(0x0200, 1);
+		assertEquals(0x0300, getPC());
+		assertEquals(0x07FD, getS());
+
+		final int retAddr = 0x0203; // Address after JSR instruction.
+
+		// Per big-endian stack storage, the high order byte should be
+		// at the ToS.
+		assertEquals(retAddr & 0xFF, readByte(0x07FF));
+		assertEquals(retAddr >> 8, readByte(0x07FE));
+	}
 }
