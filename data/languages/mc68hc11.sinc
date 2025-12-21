@@ -31,8 +31,7 @@ EA2Y: imm8,Y      is addrMode=2 & Y; imm8
 }
 
 MASK: imm8          is imm8 {
-    local tmp:1 = imm8;
-    export tmp;
+    export &:1 imm8;
 }
 
 OP1X: imm8,X  is addrMode & X; imm8
