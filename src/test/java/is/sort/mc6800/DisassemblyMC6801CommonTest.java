@@ -46,7 +46,7 @@ public abstract class DisassemblyMC6801CommonTest extends DisassemblyCommonTest 
 		super.JSR();
 
 		// The direct JSR is first present in the MC6801.
-		assertDisassemblesTo("JSR 0x00ab", 0x9D, 0xAB);
+		assertDisassemblesTo("JSR 0xab", 0x9D, 0xAB);
 	}
 
 	@Test

@@ -117,7 +117,8 @@ OP2: imm16      is addrMode=3; imm16
 @ifdef HAS_2_BYTE_JSR_JMP
 EA2: imm8      is addrMode=1; imm8
 {
-    export *:2 imm8;
+    local tmp:2 = imm8;
+    export tmp;
 }
 @endif
 EA2: imm8,X      is addrMode=2 & X; imm8

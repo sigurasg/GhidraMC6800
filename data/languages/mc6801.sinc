@@ -41,8 +41,7 @@
 {
     local addr:2 = inst_next;
     Push2(S, addr);
-    local target:2 = EA2;
-    call [target];
+    call [EA2];
 }
 
 :LDD OP2    is (op=0xCC | op=0xDC | op=0xFC | op=0xEC) ... & OP2
