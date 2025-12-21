@@ -42,4 +42,21 @@ public class EmulatorMC6801Test extends AbstractEmulatorTest {
 		stepFrom(0x0000);
 		assertEquals(CC.N + CC.C, getCC());
 	}
+
+	@Test
+	public void JSR_Direct() {
+		assemble(0x0100, "JSR 0x23");
+	
+		// Make sure this assembles to JSR direct.
+		byte[] instruction = read(0x100, 2);
+		assertEquals((byte) 0x9D, instruction[0]);
+		assertEquals(0x23, instruction[1]);
+
+		setS(0x07FF);
+		stepFrom(0x0100);
+		assertEquals(0x07FD, getS());
+		assertEquals(0x01, readByte(0x07FE));
+		assertEquals(0x02, readByte(0x07FF));
+		assertEquals(0x0023, getPC());
+	}
 }
