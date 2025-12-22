@@ -111,7 +111,6 @@ OP2: imm16      is addrMode=3; imm16
     export *:2 imm16;
 }
 
-# 2-byte EA operand for JMP/JSR
 @ifdef HAS_2_BYTE_JSR_JMP
 # This looks weird, but it is the only way I found to force the
 # disassembly to emit a single byte hex code.

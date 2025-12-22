@@ -22,27 +22,6 @@ public class DisassemblyMC6801Test extends DisassemblyMC6801CommonTest {
 	}
 
 	@Test
-	public void JSRPcode() {
-		System.out.println("JSR Extended:");
-		String[] code = getPcode(0x100, 0xBD, 0x12, 0x34);
-		for (String line : code) {
-			System.out.println(line);
-		}
-
-		System.out.println("JSR indexed:");
-		code = getPcode(0x100, 0xAD, 0x12);
-		for (String line : code) {
-			System.out.println(line);
-		}
-
-		System.out.println("JSR imm:");
-		code = getPcode(0x100, 0x9D, 0x12);
-		for (String line : code) {
-			System.out.println(line);
-		}
-	}
-
-	@Test
 	public void ValidInvalidOpCodes() {
 		Integer[] invalidOpcodes = {
 			0x00, 0x02, 0x03,
