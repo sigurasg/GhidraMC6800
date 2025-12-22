@@ -113,20 +113,25 @@ OP2: imm16      is addrMode=3; imm16
 
 # 2-byte EA operand for JMP/JSR
 @ifdef HAS_2_BYTE_JSR_JMP
-EA2: imm8      is addrMode=1; imm8
+# This looks weird, but it is the only way I found to force the
+# disassembly to emit a single byte hex code.
+EA8: addr is imm8 [ addr = imm8 & 0xFF; ]
 {
-    export &:2 imm8;
+    export *:1 imm8;
 }
 @endif
-EA2: imm8,X      is addrMode=2 & X; imm8
+
+EA16: imm16 is imm16
+{
+    export *:1 imm16;
+}
+
+EAX: imm8,X is imm8 & X
 {
     local tmp:2 = X + imm8;
     export tmp;
 }
-EA2: imm16    is addrMode=3; imm16
-{
-    export &:2 imm16;
-}
+
 
 
 ################################################################
@@ -544,9 +549,14 @@ macro PushEntireState()
     test(OP1);
 }
 
-:JMP EA2    is (op=0x6E | op=0x7E) ... & EA2
+:JMP EAX    is op=0x6E; EAX
 {
-    goto [EA2];
+    goto [EAX];
+}
+
+:JMP EA16    is op=0x7E; EA16
+{
+    goto EA16;
 }
 
 :CLR^acc_4    is (op=0x4F | op=0x5F) & acc_4
@@ -920,10 +930,16 @@ macro PushEntireState()
     call REL;
 }
 
-:JSR EA2    is (op=0xAD | op=0xBD) ... & EA2
+:JSR EAX    is op=0xAD; EAX
 {
     Push2(S, &:2 inst_next);
-    call [EA2];
+    call [EAX];
+}
+
+:JSR EA16    is op=0xBD; EA16
+{
+    Push2(S, &:2 inst_next);
+    call EA16;
 }
 
 :LDS OP2    is (op=0x8E | op=0x9E | op=0xAE | op=0xBE) ... & OP2
