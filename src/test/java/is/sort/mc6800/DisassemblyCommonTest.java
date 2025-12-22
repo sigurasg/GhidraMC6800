@@ -20,17 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.logging.log4j.Level;
 import org.junit.jupiter.api.Test;
-import org.python.antlr.PythonParser.printlist2_return;
-
 import db.Transaction;
 import ghidra.program.disassemble.Disassembler;
 import ghidra.program.model.listing.CodeUnit;

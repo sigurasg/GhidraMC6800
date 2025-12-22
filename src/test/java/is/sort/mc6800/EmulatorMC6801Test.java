@@ -46,7 +46,6 @@ public class EmulatorMC6801Test extends AbstractEmulatorTest {
 	@Test
 	public void JSR_Direct() {
 		assemble(0x0100, "JSR 0x23");
-
 		// Make sure this assembles to JSR direct.
 		byte[] instruction = read(0x100, 2);
 		assertEquals((byte) 0x9D, instruction[0]);
