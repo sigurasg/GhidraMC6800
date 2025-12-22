@@ -20,12 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-
 import db.Transaction;
 import ghidra.program.disassemble.Disassembler;
 import ghidra.program.model.listing.CodeUnit;
@@ -652,6 +653,26 @@ public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
 		catch (Exception e) {
 			return null;
 		}
+	}
+
+	protected String[] getPcode(int addr, int... code) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		for (int arg : code) {
+			stream.write(arg);
+		}
+
+		byte[] bytes = stream.toByteArray();
+		CodeUnit codeUnit = disassembleAt(addr, bytes);
+
+		assertNotNull(codeUnit);
+		assertTrue(codeUnit instanceof Instruction, "Not an instruction");
+		assertEquals(bytes.length, codeUnit.getLength(), "Wrong instruction length.");
+
+		List<String> strings = new ArrayList<String>();
+		for (var op : ((Instruction) codeUnit).getPcode()) {
+			strings.add(op.toString());
+		}
+		return strings.toArray(new String[strings.size()]);
 	}
 
 	protected CodeUnit disassemble(byte[] bytes) {

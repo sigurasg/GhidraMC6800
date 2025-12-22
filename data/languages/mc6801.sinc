@@ -37,11 +37,10 @@
     goto inst_next;
 }
 
-:JSR EA2    is op=0x9d ... & EA2
+:JSR EA8    is op=0x9d; EA8
 {
-    local addr:2 = inst_next;
-    Push2(S, addr);
-    call [EA2];
+    Push2(S, &:2 inst_next);
+    call EA8;
 }
 
 :LDD OP2    is (op=0xCC | op=0xDC | op=0xFC | op=0xEC) ... & OP2

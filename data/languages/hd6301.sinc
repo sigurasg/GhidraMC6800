@@ -15,8 +15,7 @@
 # 1-byte immediate operand.
 IMM1: "#"imm8 is imm8
 {
-    local tmp:1=imm8;
-    export tmp;
+    export &:1 imm8;
 }
 
 # 1-byte displacement operand.

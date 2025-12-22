@@ -146,7 +146,8 @@ public class EmulatorMC6800Test extends AbstractEmulatorTest {
 
 		// Per big-endian stack storage, the high order byte should be
 		// at the ToS.
-		assertEquals(retAddr & 0xFF, readByte(0x07FF));
-		assertEquals(retAddr >> 8, readByte(0x07FE));
+		byte[] retaddr = read(0x07FE, 2);
+		assertEquals(retAddr & 0xFF, retaddr[1]);
+		assertEquals(retAddr >> 8, retaddr[0]);
 	}
 }

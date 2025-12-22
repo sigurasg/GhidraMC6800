@@ -24,15 +24,14 @@ OP2Y: imm8,Y      is addrMode=2 & Y; imm8
     export *:2 tmp;
 }
 
-EA2Y: imm8,Y      is addrMode=2 & Y; imm8
+EAY: imm8,Y is imm8 & Y
 {
     local tmp:2 = Y + imm8;
     export tmp;
 }
 
 MASK: imm8          is imm8 {
-    local tmp:1 = imm8;
-    export tmp;
+    export &:1 imm8;
 }
 
 OP1X: imm8,X  is addrMode & X; imm8
@@ -94,16 +93,16 @@ OP1X: imm8,X  is addrMode & X; imm8
     test(OP1Y);
 }
 
-:JMP EA2Y    is op=0x18; op=0x6E ... & EA2Y
+:JMP EAY    is op=0x18; op=0x6E; EAY
 {
-    goto [EA2Y];
+    goto [EAY];
 }
 
-:JSR EA2Y    is op=0x18; op=0xAD ... & EA2Y
+:JSR EAY    is op=0x18; op=0xAD; EAY
 {
     local addr:2 = inst_next;
     Push2(S, addr);
-    call [EA2Y];
+    call [EAY];
 }
 
 :LDS OP2Y    is op=0x18; op=0xAE ... & OP2Y
