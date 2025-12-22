@@ -40,10 +40,6 @@ import ghidra.program.model.mem.MemoryBlock;
 import ghidra.util.task.TaskMonitor;
 
 public abstract class DisassemblyCommonTest extends AbstractIntegrationTest {
-	public DisassemblyCommonTest() {
-		super("MC6800:BE:16:default");
-	}
-
 	protected DisassemblyCommonTest(String lang) {
 		super(lang);
 	}
