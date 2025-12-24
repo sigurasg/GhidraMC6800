@@ -67,7 +67,7 @@ public class MC6800JSRAnalyzer extends AbstractAnalyzer {
     @Override
     public boolean canAnalyze(Program program) {
         // Only analyze for 16 bit address spaces.
-        AddressSpace ram = program.getAddressFactory().getAddressSpace("ram");
+        AddressSpace ram = program.getAddressFactory().getDefaultAddressSpace();
         if (ram == null || ram.getSize() != 16) {
             return false;
         }
