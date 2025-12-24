@@ -18,26 +18,41 @@ import ghidra.app.services.AbstractAnalyzer;
 import ghidra.app.services.AnalyzerType;
 import ghidra.app.util.importer.MessageLog;
 import ghidra.program.model.address.AddressSetView;
+import ghidra.program.model.address.AddressSpace;
 import ghidra.program.model.listing.Program;
 import ghidra.util.exception.CancelledException;
 import ghidra.util.task.TaskMonitor;
 
 /**
- * An analyzer that makes sure JSR instructions reference the called function
- * as a primary reference.
+ * An analyzer that makes sure computed JSR instructions reference the called
+ * function as a primary reference, when Ghidra is able to infer the called
+ * function.
  *
- * When Ghidra can infer the value of the stack pointer, the JSR instruction
- * will have two references.
+ * When Ghidra can infer the value of the stack pointer and the X/Y register,
+ * a computed JSR instruction will have two references.
  *  1. A write reference to the location in stack where the return address is stored.
  *  2. A call reference to the called function.
  *
+ * This would happen for example for the following code:
+ *   LDS #$07FF
+ *   LDX fn
+ *   JSR 0,X
+ *
+ * fn:
+ *   RTS
+ *
  * By default Ghidra marks the write reference as primary, this analyzer
  * changes that to make the call reference primary.
-*/
+ *
+ * Because this should be a fairly rare case for MC6800 programs, and because this
+ * might have unforseen side effects on non-MC6800 programs, this analyzer is not
+ * enabled by default.
+ */
 public class MC6800JSRAnalyzer extends AbstractAnalyzer {
     public MC6800JSRAnalyzer() {
         super("MC6800 JSR Analyzer",
-            "Makes sure JSR instructions reference the called function as a primary reference",
+            "Makes sure computed JSR instructions reference the called function" +
+                " as a primary reference",
             AnalyzerType.INSTRUCTION_ANALYZER);
 
         // Allow one time analysis.
@@ -46,12 +61,17 @@ public class MC6800JSRAnalyzer extends AbstractAnalyzer {
 
     @Override
     public boolean getDefaultEnablement(Program program) {
-        return true;
+        return false;
     }
 
     @Override
     public boolean canAnalyze(Program program) {
-        // TODO(siggi): Maybe this needs to filter for specific processor versions?
+        // Only analyze for 16 bit address spaces.
+        AddressSpace ram = program.getAddressFactory().getDefaultAddressSpace();
+        if (ram == null || ram.getSize() != 16) {
+            return false;
+        }
+
         return true;
     }
 
