@@ -345,9 +345,8 @@ macro Push1(reg, op)
 # Push 2 byte operand op
 macro Push2(reg, op)
 {
-    reg = reg - 1;
-    *:2 reg = op;
-    reg = reg - 1;
+    *:2 (reg - 1) = op;
+    reg = reg - 2;
 }
 
 # Pull 1 byte operand op
