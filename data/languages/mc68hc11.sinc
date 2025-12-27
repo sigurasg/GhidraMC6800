@@ -43,291 +43,291 @@ OP1X: imm8,X  is addrMode & X; imm8
 
 # The 6800 instructions with imm,Y address mode.
 
-:NEG OP1Y    is op=0x18; op=0x60 ... & OP1Y
+:NEG OP1Y               is op=0x18; op=0x60 ... & OP1Y
 {
     negate(OP1Y);
 }
 
-:COM OP1Y    is op=0x18; op=0x63 ... & OP1Y
+:COM OP1Y               is op=0x18; op=0x63 ... & OP1Y
 {
     complement(OP1Y);
 }
 
-:LSR OP1Y    is op=0x18; op=0x64 ... & OP1Y
+:LSR OP1Y               is op=0x18; op=0x64 ... & OP1Y
 {
     logicalShiftRight(OP1Y);
 }
 
-:ROR OP1Y    is op=0x18; op=0x66 ... & OP1Y
+:ROR OP1Y               is op=0x18; op=0x66 ... & OP1Y
 {
     rotateRightWithCarry(OP1Y);
 }
 
-:ASR OP1Y    is op=0x18; op=0x67 ... & OP1Y
+:ASR OP1Y               is op=0x18; op=0x67 ... & OP1Y
 {
     arithmeticShiftRight(OP1Y);
 }
 
-:ASL OP1Y    is op=0x18; op=0x68 ... & OP1Y
+:ASL OP1Y               is op=0x18; op=0x68 ... & OP1Y
 {
     logicalShiftLeft(OP1Y);
 }
 
-:ROL OP1Y    is op=0x18; op=0x69 ... & OP1Y
+:ROL OP1Y               is op=0x18; op=0x69 ... & OP1Y
 {
     rotateLeftWithCarry(OP1Y);
 }
 
-:DEC OP1Y    is op=0x18; op=0x6A ... & OP1Y
+:DEC OP1Y               is op=0x18; op=0x6A ... & OP1Y
 {
     decrement(OP1Y);
 }
 
-:INC OP1Y    is op=0x18; op=0x6C ... & OP1Y
+:INC OP1Y               is op=0x18; op=0x6C ... & OP1Y
 {
     increment(OP1Y);
 }
 
-:TST OP1Y    is op=0x18; op=0x6D ... & OP1Y
+:TST OP1Y               is op=0x18; op=0x6D ... & OP1Y
 {
     test(OP1Y);
 }
 
-:JMP EAY    is op=0x18; op=0x6E; EAY
+:JMP EAY                is op=0x18; op=0x6E; EAY
 {
     goto [EAY];
 }
 
-:JSR EAY    is op=0x18; op=0xAD; EAY
+:JSR EAY                is op=0x18; op=0xAD; EAY
 {
     local addr:2 = inst_next;
     Push2(S, addr);
     call [EAY];
 }
 
-:LDS OP2Y    is op=0x18; op=0xAE ... & OP2Y
+:LDS OP2Y               is op=0x18; op=0xAE ... & OP2Y
 {
     loadRegister(S, OP2Y);
 }
 
-:STS OP2Y    is op=0x18; op=0xAF ... & OP2Y
+:STS OP2Y               is op=0x18; op=0xAF ... & OP2Y
 {
     storeRegister(S, OP2Y);
 }
 
-:STD OP2Y    is op=0x18; op=0xED ... & OP2Y
+:STD OP2Y               is op=0x18; op=0xED ... & OP2Y
 {
     storeRegister(D, OP2Y);
 }
 
-:SUBD OP2Y    is op=0x18; op=0xA3 ... & OP2Y
+:SUBD OP2Y              is op=0x18; op=0xA3 ... & OP2Y
 {
     subtraction(D, OP2Y);
 }
 
-:CLR OP1Y    is op=0x18; op=0x6F ... & OP1Y
+:CLR OP1Y               is op=0x18; op=0x6F ... & OP1Y
 {
     clear(OP1Y);
 }
 
-:SUBA OP1Y    is op=0x18; op=0xA0 ... & OP1Y
+:SUBA OP1Y              is op=0x18; op=0xA0 ... & OP1Y
 {
     subtraction(A, OP1Y);
 }
 
-:SUBB OP1Y    is op=0x18; op=0xE0 ... & OP1Y
+:SUBB OP1Y              is op=0x18; op=0xE0 ... & OP1Y
 {
     subtraction(B, OP1Y);
 }
 
-:CMPA OP1Y    is op=0x18; op=0xA1 ... & OP1Y
+:CMPA OP1Y              is op=0x18; op=0xA1 ... & OP1Y
 {
     compare(A, OP1Y);
 }
 
-:CMPB OP1Y    is op=0x18; op=0xE1 ... & OP1Y
+:CMPB OP1Y              is op=0x18; op=0xE1 ... & OP1Y
 {
     compare(B, OP1Y);
 }
 
-:SBCA OP1Y    is op=0x18; op=0xA2 ... & OP1Y
+:SBCA OP1Y              is op=0x18; op=0xA2 ... & OP1Y
 {
     subtractionWithCarry(A, OP1Y);
 }
 
-:SBCB OP1Y    is op=0x18; op=0xE2 ... & OP1Y
+:SBCB OP1Y              is op=0x18; op=0xE2 ... & OP1Y
 {
     subtractionWithCarry(B, OP1Y);
 }
 
-:ANDA OP1Y    is op=0x18; op=0xA4 ... & OP1Y
+:ANDA OP1Y              is op=0x18; op=0xA4 ... & OP1Y
 {
     logicalAnd(A, OP1Y);
 }
 
-:ANDB OP1Y    is op=0x18; op=0xE4 ... & OP1Y
+:ANDB OP1Y              is op=0x18; op=0xE4 ... & OP1Y
 {
     logicalAnd(B, OP1Y);
 }
 
-:BITA OP1Y    is op=0x18; op=0xA5 ... & OP1Y
+:BITA OP1Y              is op=0x18; op=0xA5 ... & OP1Y
 {
     bitTest(A, OP1Y);
 }
 
-:BITB OP1Y    is op=0x18; op=0xE5 ... & OP1Y
+:BITB OP1Y              is op=0x18; op=0xE5 ... & OP1Y
 {
     bitTest(B, OP1Y);
 }
 
-:LDAA OP1Y    is op=0x18; op=0xA6 ... & OP1Y
+:LDAA OP1Y              is op=0x18; op=0xA6 ... & OP1Y
 {
     loadRegister(A, OP1Y);
 }
 
-:LDAB OP1Y    is op=0x18; op=0xE6 ... & OP1Y
+:LDAB OP1Y              is op=0x18; op=0xE6 ... & OP1Y
 {
     loadRegister(B, OP1Y);
 }
 
-:STAA OP1Y    is op=0x18; op=0xA7 ... & OP1Y
+:STAA OP1Y              is op=0x18; op=0xA7 ... & OP1Y
 {
     storeRegister(A, OP1Y);
 }
 
-:STAB OP1Y    is op=0x18; op=0xE7 ... & OP1Y
+:STAB OP1Y              is op=0x18; op=0xE7 ... & OP1Y
 {
     storeRegister(B, OP1Y);
 }
 
-:EORA OP1Y    is op=0x18; op=0xA8 ... & OP1Y
+:EORA OP1Y              is op=0x18; op=0xA8 ... & OP1Y
 {
     logicalExclusiveOr(A, OP1Y);
 }
 
-:EORB OP1Y    is op=0x18; op=0xE8 ... & OP1Y
+:EORB OP1Y              is op=0x18; op=0xE8 ... & OP1Y
 {
     logicalExclusiveOr(B, OP1Y);
 }
 
-:ADCA OP1Y    is op=0x18; op=0xA9 ... & OP1Y
+:ADCA OP1Y              is op=0x18; op=0xA9 ... & OP1Y
 {
     additionWithCarry(A, OP1Y);
 }
 
-:ADCB OP1Y    is op=0x18; op=0xE9 ... & OP1Y
+:ADCB OP1Y              is op=0x18; op=0xE9 ... & OP1Y
 {
     additionWithCarry(B, OP1Y);
 }
 
-:ORAA OP1Y    is op=0x18; op=0xAA ... & OP1Y
+:ORAA OP1Y              is op=0x18; op=0xAA ... & OP1Y
 {
     logicalOr(A, OP1Y);
 }
 
-:ORAB OP1Y    is op=0x18; op=0xEA ... & OP1Y
+:ORAB OP1Y              is op=0x18; op=0xEA ... & OP1Y
 {
     logicalOr(B, OP1Y);
 }
 
-:ADDA OP1Y    is op=0x18; op=0xAB ... & OP1Y
+:ADDA OP1Y              is op=0x18; op=0xAB ... & OP1Y
 {
     setHFlag(A, OP1Y);
     addition(A, OP1Y);
 }
 
-:ADDB OP1Y    is op=0x18; op=0xEB ... & OP1Y
+:ADDB OP1Y              is op=0x18; op=0xEB ... & OP1Y
 {
     setHFlag(B, OP1Y);
     addition(B, OP1Y);
 }
 
 # The 6800 Y specific instructions.
-:INY    is op=0x18; op=0x08
+:INY                    is op=0x18; op=0x08
 {
     Y = Y + 1;
     Z = (Y == 0);
 }
 
-:DEY    is op=0x18; op=0x09
+:DEY                    is op=0x18; op=0x09
 {
     Y = Y - 1;
     Z = (Y == 0);
 }
 
-:TSY    is op=0x18; op=0x30
+:TSY                    is op=0x18; op=0x30
 {
     Y = S + 1;
 }
 
-:TYS    is op=0x18; op=0x35
+:TYS                    is op=0x18; op=0x35
 {
     S = Y - 1;
 }
 
-:CPY OP2    is op=0x18; (op=0x8C | op=0x9C | op=0xBC) ... & OP2
+:CPY OP2                is op=0x18; (op=0x8C | op=0x9C | op=0xBC) ... & OP2
 {
     compare(Y, OP2);
 }
-:CPY OP2Y    is op=0x18; op=0xAC ... & OP2Y
+:CPY OP2Y               is op=0x18; op=0xAC ... & OP2Y
 {
     compare(Y, OP2Y);
 }
-:CPY OP2    is op=0x1A; op=0xAC ... & OP2
+:CPY OP2                is op=0x1A; op=0xAC ... & OP2
 {
     compare(Y, OP2);
 }
 
-:LDY OP2    is op=0x18; (op=0xCE | op=0xDE | op=0xFE) ... & OP2
+:LDY OP2                is op=0x18; (op=0xCE | op=0xDE | op=0xFE) ... & OP2
 {
     loadRegister(Y, OP2);
 }
-:LDY OP2Y    is op=0x18; op=0xEE ... & OP2Y
+:LDY OP2Y               is op=0x18; op=0xEE ... & OP2Y
 {
     loadRegister(Y, OP2Y);
 }
-:LDY OP2    is op=0x1A; op=0xEE ... & OP2
+:LDY OP2                is op=0x1A; op=0xEE ... & OP2
 {
     loadRegister(Y, OP2);
 }
 
-:STY OP2    is op=0x18; (op=0xDF | op=0xFF) ... & OP2
+:STY OP2                is op=0x18; (op=0xDF | op=0xFF) ... & OP2
 {
     storeRegister(Y, OP2);
 }
-:STY OP2Y    is op=0x18; op=0xEF ... & OP2Y
+:STY OP2Y               is op=0x18; op=0xEF ... & OP2Y
 {
     storeRegister(Y, OP2Y);
 }
-:STY OP2    is op=0x1A; op=0xEF ... & OP2
+:STY OP2                is op=0x1A; op=0xEF ... & OP2
 {
     storeRegister(Y, OP2);
 }
 
-:ABY        is op=0x18; op=0x3A
+:ABY                    is op=0x18; op=0x3A
 {
     # No effect on flags.
     Y = Y + zext(B);
 }
 
-:PSHY       is op=0x18; op=0x3C
+:PSHY                   is op=0x18; op=0x3C
 {
     Push2(S, Y);
 }
 
-:PULY       is op=0x18; op=0x38
+:PULY                   is op=0x18; op=0x38
 {
     Pull2(S, Y);
 }
 
 # MC68HC11 specific instructions.
 
-:TEST       is op=0x00 {
+:TEST                   is op=0x00 {
     # This is a NOP for our purposes.    
     goto inst_next;
 }
 
-:IDIV       is op=0x02 {
+:IDIV                   is op=0x02 {
     local num:2 = D;
     local den:2 = X;
 
@@ -347,7 +347,7 @@ OP1X: imm8,X  is addrMode & X; imm8
     C = (den == 0);
 }
 
-:FDIV       is op=0x03 {
+:FDIV                   is op=0x03 {
     local num:4 = zext(D);
     local den:4 = zext(X);
 
@@ -379,108 +379,108 @@ OP1X: imm8,X  is addrMode & X; imm8
     C = (den == 0);
 }
 
-:BRSET OP1 MASK REL is op=0x12 ... & OP1; MASK; REL
+:BRSET OP1 MASK REL     is op=0x12 ... & OP1; MASK; REL
 {
     if ((OP1 & MASK) != 0)
         goto REL;
 }
 # This opcode has the wrong addrMode for OP1.
-:BRSET OP1X MASK REL is op=0x1E ... & OP1X; MASK; REL
+:BRSET OP1X MASK REL    is op=0x1E ... & OP1X; MASK; REL
 {
     if ((OP1X & MASK) != 0)
         goto REL;
 }
-:BRSET OP1Y MASK REL is op=0x18; op=0x1E ... & OP1Y; MASK; REL
+:BRSET OP1Y MASK REL    is op=0x18; op=0x1E ... & OP1Y; MASK; REL
 {
     if ((OP1Y & MASK) != 0)
         goto REL;
 }
 
-:BRCLR OP1 MASK REL is op=0x13 ... & OP1; MASK; REL
+:BRCLR OP1 MASK REL     is op=0x13 ... & OP1; MASK; REL
 {
     if ((OP1 & MASK) == 0)
         goto REL;
 }
 # This opcode has the wrong addrMode for OP1.
-:BRCLR OP1X MASK REL is op=0x1F ... & OP1X ; MASK; REL
+:BRCLR OP1X MASK REL    is op=0x1F ... & OP1X ; MASK; REL
 {
     if ((OP1X & MASK) == 0)
         goto REL;
 }
-:BRCLR OP1Y MASK REL is op=0x18; op=0x1F ... & OP1Y; MASK; REL
+:BRCLR OP1Y MASK REL    is op=0x18; op=0x1F ... & OP1Y; MASK; REL
 {
     if ((OP1Y & MASK:1) == 0)
         goto REL;
 }
 
-:BSET   OP1 MASK    is op=0x14 ... & OP1; MASK {
+:BSET   OP1 MASK        is op=0x14 ... & OP1; MASK {
     OP1 = OP1 | MASK;
 }
 # This opcode has the wrong addrMode for OP1.
-:BSET OP1X MASK is op=0x1C ... & OP1X; MASK {
+:BSET OP1X MASK         is op=0x1C ... & OP1X; MASK {
     OP1X = OP1X | MASK;
 }
-:BSET   OP1Y MASK   is op=0x18; op=0x1C ... & OP1Y; MASK {
+:BSET   OP1Y MASK       is op=0x18; op=0x1C ... & OP1Y; MASK {
     OP1Y = OP1Y | MASK;
 }
 
-:BCLR   OP1 MASK    is op=0x15 ... & OP1; MASK {
+:BCLR   OP1 MASK        is op=0x15 ... & OP1; MASK {
     OP1 = OP1 & ~MASK;
 }
 # This opcode has the wrong addrMode for OP1.
-:BCLR OP1X MASK is op=0x1D ... & OP1X; MASK {
+:BCLR OP1X MASK         is op=0x1D ... & OP1X; MASK {
     OP1X = OP1X & ~MASK;
 }
-:BCLR   OP1Y MASK   is op=0x18; op=0x1D ... & OP1Y; MASK {
+:BCLR   OP1Y MASK       is op=0x18; op=0x1D ... & OP1Y; MASK {
     OP1Y = OP1Y & ~MASK;
 }
 
-:XGDX               is op=0x8F {
+:XGDX                   is op=0x8F {
     local tmp:2=X;
     X=D;
     D=tmp;
 }
-:XGDY               is op=0x18; op=0x8F {
+:XGDY                   is op=0x18; op=0x8F {
     local tmp:2=Y;
     Y=D;
     D=tmp;
 }
 
-:STOP               is op=0xCF {
+:STOP                   is op=0xCF {
     # Treat as a NOP for disassembly and emulation?
     goto inst_next;
 }
 
 # 6801 Y-specific instructions.
 
-:ADDD OP2Y   is op=0x18; op=0xE3 ... & OP2Y
+:ADDD OP2Y              is op=0x18; op=0xE3 ... & OP2Y
 {
     addition(D, OP2Y);
 }
 
-:LDD OP2Y    is op=0x18; op=0xEC ... & OP2Y
+:LDD OP2Y               is op=0x18; op=0xEC ... & OP2Y
 {
     loadRegister(D, OP2Y);
 }
 
-:CPD OP2    is op=0x1A; (op=0x83 | op=0x93 | op=0xA3 | op=0xB3) ... & OP2
+:CPD OP2                is op=0x1A; (op=0x83 | op=0x93 | op=0xA3 | op=0xB3) ... & OP2
 {
     compare(D, OP2);
 }
-:CPD OP2Y    is op=0xCD; op=0xA3 ... & OP2Y
+:CPD OP2Y               is op=0xCD; op=0xA3 ... & OP2Y
 {
     compare(D, OP2Y);
 }
 
-:CPX OP2Y    is op=0xCD; op=0xAC ... & OP2Y
+:CPX OP2Y               is op=0xCD; op=0xAC ... & OP2Y
 {
     compare(X, OP2Y);
 }
 
-:LDX OP2Y   is op=0xCD; op=0xEE ... & OP2Y {
+:LDX OP2Y               is op=0xCD; op=0xEE ... & OP2Y {
     loadRegister(X, OP2Y);
 }
 
-:STX OP2Y   is op=0xCD; op=0xEF ... & OP2Y {
+:STX OP2Y               is op=0xCD; op=0xEF ... & OP2Y {
     storeRegister(X, OP2Y);
 }
