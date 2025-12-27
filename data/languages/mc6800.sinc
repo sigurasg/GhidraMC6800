@@ -381,60 +381,60 @@ macro PushEntireState()
 # Opcode 0x00 - 0x0F, misc operations
 ################################################################
 
-:NOP    is op=0x01
+:NOP        is op=0x01
 {
     # Intentional NOP.
     goto inst_next;
 }
 
-:TAP    is op=0x06
+:TAP        is op=0x06
 {
     CC = A & 0x1F;
 }
 
-:TPA    is op=0x07
+:TPA        is op=0x07
 {
     A = CC;
 }
 
-:INX    is op=0x08
+:INX        is op=0x08
 {
     X = X + 1;
     Z = (X == 0);
 }
 
-:DEX    is op=0x09
+:DEX        is op=0x09
 {
     X = X - 1;
     Z = (X == 0);
 }
 
-:CLV    is op=0x0A
+:CLV        is op=0x0A
 {
     V = 0;
 }
 
-:SEV     is op=0x0B
+:SEV        is op=0x0B
 {
     V = 1;
 }
 
-:CLC     is op=0x0C
+:CLC        is op=0x0C
 {
     C = 0;
 }
 
-:SEC     is op=0x0D
+:SEC        is op=0x0D
 {
     C = 1;
 }
 
-:CLI     is op=0x0E
+:CLI        is op=0x0E
 {
     I = 0;
 }
 
-:SEI     is op=0x0F
+:SEI        is op=0x0F
 {
     I = 1;
 }
@@ -446,7 +446,7 @@ macro PushEntireState()
 # Opcode 0x70 - 0x7F, extended addressing
 ################################################################
 
-:NEG^acc_4    is (op=0x40 | op=0x50) & acc_4
+:NEG^acc_4  is (op=0x40 | op=0x50) & acc_4
 {
     negate(acc_4);
 }
@@ -506,7 +506,7 @@ macro PushEntireState()
     logicalShiftLeft(OP1);
 }
 
-:ROL^acc_4    is (op=0x49 | op=0x59) & acc_4
+:ROL^acc_4  is (op=0x49 | op=0x59) & acc_4
 {
     rotateLeftWithCarry(acc_4);
 }
@@ -516,7 +516,7 @@ macro PushEntireState()
     rotateLeftWithCarry(OP1);
 }
 
-:DEC^acc_4    is (op=0x4A | op=0x5A) & acc_4
+:DEC^acc_4  is (op=0x4A | op=0x5A) & acc_4
 {
     decrement(acc_4);
 }
@@ -526,7 +526,7 @@ macro PushEntireState()
     decrement(OP1);
 }
 
-:INC^acc_4    is (op=0x4C | op=0x5C) & acc_4
+:INC^acc_4  is (op=0x4C | op=0x5C) & acc_4
 {
     increment(acc_4);
 }
@@ -536,7 +536,7 @@ macro PushEntireState()
     increment(OP1);
 }
 
-:TST^acc_4    is (op=0x4D | op=0x5D) & acc_4
+:TST^acc_4  is (op=0x4D | op=0x5D) & acc_4
 {
     test(acc_4);
 }
@@ -551,12 +551,12 @@ macro PushEntireState()
     goto [EAX];
 }
 
-:JMP EA16    is op=0x7E; EA16
+:JMP EA16   is op=0x7E; EA16
 {
     goto EA16;
 }
 
-:CLR^acc_4    is (op=0x4F | op=0x5F) & acc_4
+:CLR^acc_4  is (op=0x4F | op=0x5F) & acc_4
 {
     clear(acc_4);
 }
@@ -570,27 +570,27 @@ macro PushEntireState()
 # Opcode 0x10 - 0x1F, misc. addressing
 ################################################################
 
-:SBA    is op=0x10
+:SBA        is op=0x10
 {
     subtraction(A, B);
 }
 
-:CBA    is op=0x11
+:CBA        is op=0x11
 {
     compare(A, B);
 }
 
-:TAB    is op=0x16
+:TAB        is op=0x16
 {
     loadRegister(B, A);
 }
 
-:TBA    is op=0x17
+:TBA        is op=0x17
 {
     loadRegister(A, B);
 }
 
-:DAA    is op=0x19
+:DAA        is op=0x19
 {
     local highA:1 = A >> 4;
     local lowA:1  = A & 0x0F;
@@ -622,7 +622,7 @@ macro PushEntireState()
     setNZFlags(A);
 }
 
-:ABA    is op=0x1B
+:ABA        is op=0x1B
 {
     addition(A, B);
 }
@@ -660,7 +660,7 @@ macro PushEntireState()
     if (C) goto REL;
 }
 
-:BNE REL     is op=0x26; REL
+:BNE REL    is op=0x26; REL
 {
     if (Z == 0) goto REL;
 }
@@ -705,7 +705,7 @@ macro PushEntireState()
     if ((Z == 0) && (N == V)) goto REL;
 }
 
-:BLE REL     is op=0x2F; REL
+:BLE REL    is op=0x2F; REL
 {
     if (Z || (N != V)) goto REL;
 }
@@ -714,54 +714,54 @@ macro PushEntireState()
 # Opcode 0x30 - 0x3F, misc. addressing
 ################################################################
 
-:TSX    is op=0x30
+:TSX        is op=0x30
 {
     X = S + 1;
 }
 
-:INS    is op=0x31
+:INS        is op=0x31
 {
     S = S + 1;
 }
 
-:PULA   is op=0x32
+:PULA       is op=0x32
 {
     Pull1(S, A);
 }
 
-:PULB   is op=0x33
+:PULB       is op=0x33
 {
     Pull1(S, B);
 }
 
-:DES    is op=0x34
+:DES        is op=0x34
 {
     S = S - 1;
 }
 
-:TXS    is op=0x35
+:TXS        is op=0x35
 {
     S = X - 1;
 }
 
-:PSHA   is op=0x36
+:PSHA       is op=0x36
 {
     Push1(S, A);
 }
 
-:PSHB   is op=0x37
+:PSHB       is op=0x37
 {
     Push1(S, B);
 }
 
-:RTS    is op=0x39
+:RTS        is op=0x39
 {
     local addr:2;
     Pull2(S, addr);
     return [addr];
 }
 
-:RTI    is op=0x3B
+:RTI        is op=0x3B
 {
     local addr:2;
     Pull1(S, CC);
@@ -772,12 +772,12 @@ macro PushEntireState()
     return [addr];
 }
 
-:WAI    is op=0x3E
+:WAI        is op=0x3E
 {
     PushEntireState();
 }
 
-:SWI    is op=0x3F
+:SWI        is op=0x3F
 {
     PushEntireState();
     I = 1;
@@ -797,113 +797,113 @@ macro PushEntireState()
 # Opcode 0xF0 - 0xFF, extended addressing
 ################################################################
 
-:SUBA OP1    is (op=0x80 | op=0x90 | op=0xA0 | op=0xB0) ... & OP1
+:SUBA OP1   is (op=0x80 | op=0x90 | op=0xA0 | op=0xB0) ... & OP1
 {
     subtraction(A, OP1);
 }
 
-:SUBB OP1    is (op=0xC0 | op=0xD0 | op=0xE0 | op=0xF0) ... & OP1
+:SUBB OP1   is (op=0xC0 | op=0xD0 | op=0xE0 | op=0xF0) ... & OP1
 {
     subtraction(B, OP1);
 }
 
-:CMPA OP1    is (op=0x81 | op=0x91 | op=0xA1 | op=0xB1) ... & OP1
+:CMPA OP1   is (op=0x81 | op=0x91 | op=0xA1 | op=0xB1) ... & OP1
 {
     compare(A, OP1);
 }
 
-:CMPB OP1    is (op=0xC1 | op=0xD1 | op=0xE1 | op=0xF1) ... & OP1
+:CMPB OP1   is (op=0xC1 | op=0xD1 | op=0xE1 | op=0xF1) ... & OP1
 {
     compare(B, OP1);
 }
 
-:SBCA OP1    is (op=0x82 | op=0x92 | op=0xA2 | op=0xB2) ... & OP1
+:SBCA OP1   is (op=0x82 | op=0x92 | op=0xA2 | op=0xB2) ... & OP1
 {
     subtractionWithCarry(A, OP1);
 }
 
-:SBCB OP1    is (op=0xC2 | op=0xD2 | op=0xE2 | op=0xF2) ... & OP1
+:SBCB OP1   is (op=0xC2 | op=0xD2 | op=0xE2 | op=0xF2) ... & OP1
 {
     subtractionWithCarry(B, OP1);
 }
 
-:ANDA OP1    is (op=0x84 | op=0x94 | op=0xA4 | op=0xB4) ... & OP1
+:ANDA OP1   is (op=0x84 | op=0x94 | op=0xA4 | op=0xB4) ... & OP1
 {
     logicalAnd(A, OP1);
 }
 
-:ANDB OP1    is (op=0xC4 | op=0xD4 | op=0xE4 | op=0xF4) ... & OP1
+:ANDB OP1   is (op=0xC4 | op=0xD4 | op=0xE4 | op=0xF4) ... & OP1
 {
     logicalAnd(B, OP1);
 }
 
-:BITA OP1    is (op=0x85 | op=0x95 | op=0xA5 | op=0xB5) ... & OP1
+:BITA OP1   is (op=0x85 | op=0x95 | op=0xA5 | op=0xB5) ... & OP1
 {
     bitTest(A, OP1);
 }
 
-:BITB OP1    is (op=0xC5 | op=0xD5 | op=0xE5 | op=0xF5) ... & OP1
+:BITB OP1   is (op=0xC5 | op=0xD5 | op=0xE5 | op=0xF5) ... & OP1
 {
     bitTest(B, OP1);
 }
 
-:LDAA OP1    is (op=0x86 | op=0x96 | op=0xA6 | op=0xB6) ... & OP1
+:LDAA OP1   is (op=0x86 | op=0x96 | op=0xA6 | op=0xB6) ... & OP1
 {
     loadRegister(A, OP1);
 }
 
-:LDAB OP1    is (op=0xC6 | op=0xD6 | op=0xE6 | op=0xF6) ... & OP1
+:LDAB OP1   is (op=0xC6 | op=0xD6 | op=0xE6 | op=0xF6) ... & OP1
 {
     loadRegister(B, OP1);
 }
 
-:STAA OP1    is (op=0x97 | op=0xA7 | op=0xB7) ... & OP1
+:STAA OP1   is (op=0x97 | op=0xA7 | op=0xB7) ... & OP1
 {
     storeRegister(A, OP1);
 }
 
-:STAB OP1    is (op=0xD7 | op=0xE7 | op=0xF7) ... & OP1
+:STAB OP1   is (op=0xD7 | op=0xE7 | op=0xF7) ... & OP1
 {
     storeRegister(B, OP1);
 }
 
-:EORA OP1    is (op=0x88 | op=0x98 | op=0xA8 | op=0xB8) ... & OP1
+:EORA OP1   is (op=0x88 | op=0x98 | op=0xA8 | op=0xB8) ... & OP1
 {
     logicalExclusiveOr(A, OP1);
 }
 
-:EORB OP1    is (op=0xC8 | op=0xD8 | op=0xE8 | op=0xF8) ... & OP1
+:EORB OP1   is (op=0xC8 | op=0xD8 | op=0xE8 | op=0xF8) ... & OP1
 {
     logicalExclusiveOr(B, OP1);
 }
 
-:ADCA OP1    is (op=0x89 | op=0x99 | op=0xA9 | op=0xB9) ... & OP1
+:ADCA OP1   is (op=0x89 | op=0x99 | op=0xA9 | op=0xB9) ... & OP1
 {
     additionWithCarry(A, OP1);
 }
 
-:ADCB OP1    is (op=0xC9 | op=0xD9 | op=0xE9 | op=0xF9) ... & OP1
+:ADCB OP1   is (op=0xC9 | op=0xD9 | op=0xE9 | op=0xF9) ... & OP1
 {
     additionWithCarry(B, OP1);
 }
 
-:ORAA OP1    is (op=0x8A | op=0x9A | op=0xAA | op=0xBA) ... & OP1
+:ORAA OP1   is (op=0x8A | op=0x9A | op=0xAA | op=0xBA) ... & OP1
 {
     logicalOr(A, OP1);
 }
 
-:ORAB OP1    is (op=0xCA | op=0xDA | op=0xEA | op=0xFA) ... & OP1
+:ORAB OP1   is (op=0xCA | op=0xDA | op=0xEA | op=0xFA) ... & OP1
 {
     logicalOr(B, OP1);
 }
 
-:ADDA OP1    is (op=0x8B | op=0x9B | op=0xAB | op=0xBB) ... & OP1
+:ADDA OP1   is (op=0x8B | op=0x9B | op=0xAB | op=0xBB) ... & OP1
 {
     setHFlag(A, OP1);
     addition(A, OP1);
 }
 
-:ADDB OP1    is (op=0xCB | op=0xDB | op=0xEB | op=0xFB) ... & OP1
+:ADDB OP1   is (op=0xCB | op=0xDB | op=0xEB | op=0xFB) ... & OP1
 {
     setHFlag(B, OP1);
     addition(B, OP1);
@@ -933,7 +933,7 @@ macro PushEntireState()
     call [EAX];
 }
 
-:JSR EA16    is op=0xBD; EA16
+:JSR EA16   is op=0xBD; EA16
 {
     Push2(S, &:2 inst_next);
     call EA16;

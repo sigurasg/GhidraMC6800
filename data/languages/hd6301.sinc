@@ -30,54 +30,54 @@ M1: imm8 is imm8
     export *:1 imm8;
 }
 
-:AIM IMM1, M1    is op=0x71; IMM1; M1
+:AIM IMM1, M1       is op=0x71; IMM1; M1
 {
     logicalAnd(M1, IMM1);
 }
 
-:AIM IMM1, DISP1 is op=0x61; IMM1; DISP1
+:AIM IMM1, DISP1    is op=0x61; IMM1; DISP1
 {
     logicalAnd(DISP1, IMM1);
 }
 
-:OIM IMM1, M1    is op=0x72; IMM1; M1
+:OIM IMM1, M1       is op=0x72; IMM1; M1
 {
     logicalOr(M1, IMM1);
 }
 
-:OIM IMM1, DISP1 is op=0x62; IMM1; DISP1
+:OIM IMM1, DISP1    is op=0x62; IMM1; DISP1
 {
     logicalOr(DISP1, IMM1);
 }
 
-:EIM IMM1, M1    is op=0x75; IMM1; M1
+:EIM IMM1, M1       is op=0x75; IMM1; M1
 {
     logicalExclusiveOr(M1, IMM1);
 }
 
-:EIM IMM1, DISP1 is op=0x65; IMM1; DISP1
+:EIM IMM1, DISP1    is op=0x65; IMM1; DISP1
 {
     logicalExclusiveOr(DISP1, IMM1);
 }
 
-:TIM IMM1, M1    is op=0x7B; IMM1; M1
+:TIM IMM1, M1       is op=0x7B; IMM1; M1
 {
     bitTest(M1, IMM1);
 }
 
-:TIM IMM1, DISP1 is op=0x6B; IMM1; DISP1
+:TIM IMM1, DISP1    is op=0x6B; IMM1; DISP1
 {
     bitTest(DISP1, IMM1);
 }
 
-:XGDX           is op=0x18
+:XGDX               is op=0x18
  {
     local tmp:2=X;
     X=D;
     D=tmp;
  }
 
-:SLP            is op=0x1A
+:SLP                is op=0x1A
 {
     # Sleeps the MPU, but for the purposes of analysis,
     # execution continues after an interrupt, so this looks
