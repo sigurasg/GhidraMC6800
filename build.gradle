@@ -96,7 +96,7 @@ task compileSleigh(type: JavaExec) {
         fileTree("$ghidraInstallDir/Ghidra/Framework") { include('**/*.jar') } +
         fileTree("$ghidraInstallDir/Ghidra/Features") { include('**/*.jar') }
 
-    args = ['-u', '-l', '-n', '-t', '-e', '-c', '-f', '-o', '-s', '-a', buildDir]
+    args = ['-u', '-l', '-n', '-t', '-e', '-c', '-f', '-s', '-a', buildDir]
 
     dependsOn(copySleighSources)
 }
