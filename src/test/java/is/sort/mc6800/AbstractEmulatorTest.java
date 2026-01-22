@@ -196,12 +196,12 @@ public abstract class AbstractEmulatorTest extends AbstractIntegrationTest {
 	private PcodeEmulator emulator = null;
 	private PcodeThread<byte[]> thread = null;
 
-	Register regA = null;
-	Register regB = null;
-	Register regD = null;
-	Register regCC = null;
-	Register regX = null;
-	Register regY = null;
-	Register regS = null;
-	Register regPC = null;
+	private Register regA = null;
+	private Register regB = null;
+	private Register regD = null;
+	private Register regCC = null;
+	private Register regX = null;
+	private Register regY = null;
+	private Register regS = null;
+	private Register regPC = null;
 };
