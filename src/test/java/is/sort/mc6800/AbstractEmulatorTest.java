@@ -36,6 +36,15 @@ public abstract class AbstractEmulatorTest extends AbstractIntegrationTest {
 
 		emulator = new PcodeEmulator(language);
 		thread = emulator.newThread();
+
+		regA = language.getRegister("A");
+		regB = language.getRegister("B");
+		regD = language.getRegister("D");
+		regCC = language.getRegister("CC");
+		regX = language.getRegister("X");
+		regY = language.getRegister("Y");
+		regS = language.getRegister("S");
+		regPC = language.getRegister("PC");
 	}
 
 	protected int assemble(int addr, String... code) {
@@ -60,68 +69,68 @@ public abstract class AbstractEmulatorTest extends AbstractIntegrationTest {
 	}
 
 	protected void setA(int value) {
-		writeRegister("A", value);
+		writeRegister(regA, value);
 	}
 
 	protected void setB(int value) {
-		writeRegister("B", value);
+		writeRegister(regB, value);
 	}
 
 	protected void setD(int value) {
-		writeRegister("D", value);
+		writeRegister(regD, value);
 	}
 
 	protected void setCC(int value) {
-		writeRegister("CC", value);
+		writeRegister(regCC, value);
 	}
 
 	protected void setX(int value) {
-		writeRegister("X", value);
+		writeRegister(regX, value);
 	}
 
 	protected void setY(int value) {
-		writeRegister("Y", value);
+		writeRegister(regY, value);
 	}
 
 	protected void setS(int value) {
-		writeRegister("S", value);
+		writeRegister(regS, value);
 	}
 
 	protected void setPC(int value) {
-		writeRegister("PC", value);
+		writeRegister(regPC, value);
 		thread.setCounter(address(value));
 	}
 
 	protected int getA() {
-		return readRegister("A");
+		return readRegister(regA);
 	}
 
 	protected int getB() {
-		return readRegister("B");
+		return readRegister(regB);
 	}
 
 	protected int getD() {
-		return readRegister("D");
+		return readRegister(regD);
 	}
 
 	protected int getCC() {
-		return readRegister("CC");
+		return readRegister(regCC);
 	}
 
 	protected int getX() {
-		return readRegister("X");
+		return readRegister(regX);
 	}
 
 	protected int getY() {
-		return readRegister("Y");
+		return readRegister(regY);
 	}
 
 	protected int getS() {
-		return readRegister("S");
+		return readRegister(regS);
 	}
 
 	protected int getPC() {
-		return readRegister("PC");
+		return readRegister(regPC);
 	}
 
 	protected void write(int addr, int... bytes) {
@@ -172,15 +181,13 @@ public abstract class AbstractEmulatorTest extends AbstractIntegrationTest {
 		return emulator.getSharedState().getVar(dyn, addr, length, true, Reason.INSPECT);
 	}
 
-	private void writeRegister(String name, int value) {
-		Register reg = language.getRegister(name);
+	private void writeRegister(Register reg , int value) {
 		thread.getState()
 				.setVar(reg, Utils.longToBytes(value,
 					reg.getNumBytes(), language.isBigEndian()));
 	}
 
-	private int readRegister(String name) {
-		Register reg = language.getRegister(name);
+	private int readRegister(Register reg ) {
 		return (int) Utils.bytesToLong(thread.getState().getVar(reg, Reason.INSPECT),
 			reg.getNumBytes(), language.isBigEndian());
 
@@ -188,4 +195,13 @@ public abstract class AbstractEmulatorTest extends AbstractIntegrationTest {
 
 	private PcodeEmulator emulator = null;
 	private PcodeThread<byte[]> thread = null;
+
+	Register regA = null;
+	Register regB = null;
+	Register regD = null;
+	Register regCC = null;
+	Register regX = null;
+	Register regY = null;
+	Register regS = null;
+	Register regPC = null;
 };
