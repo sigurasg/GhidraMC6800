@@ -346,4 +346,92 @@ public class EmulatorMC6800Test extends AbstractEmulatorTest {
 		assertEquals(retAddr & 0xFF, retaddr[1]);
 		assertEquals(retAddr >> 8, retaddr[0]);
 	}
+
+	@Test
+	public void LDAA() {
+		assemble(0x0000, "LDAA #0x42");    // Immediate: positive value.
+		assemble(0x0002, "LDAA #0x00");    // Immediate: zero.
+		assemble(0x0004, "LDAA #0x80");    // Immediate: negative (MSB set).
+		assemble(0x0006, "LDAA 0x50");     // Direct: reads from zero-page address.
+		assemble(0x0008, "LDAA 0x10,X");   // Indexed: reads from X + offset.
+		assemble(0x000A, "LDAA 0x0300");   // Extended: reads from 16-bit address.
+
+		// Immediate: positive value — A gets value, N=0, Z=0, V=0.
+		setCC(CC.V | CC.C);
+		stepFrom(0x0000);
+		assertEquals(0x42, getA());
+		assertEquals(CC.C, getCC());      // V cleared, C unaffected.
+
+		// Immediate: zero — Z set, N=0, V=0.
+		setCC(CC.V | CC.C);
+		stepFrom(0x0002);
+		assertEquals(0x00, getA());
+		assertEquals(CC.Z | CC.C, getCC());
+
+		// Immediate: negative — N set, Z=0, V=0.
+		setCC(CC.V | CC.C);
+		stepFrom(0x0004);
+		assertEquals(0x80, getA());
+		assertEquals(CC.N | CC.C, getCC());
+
+		// Direct: loads from zero-page address 0x50.
+		write(0x0050, 0x77);
+		stepFrom(0x0006);
+		assertEquals(0x77, getA());
+
+		// Indexed: loads from X + 0x10.
+		write(0x0110, 0x55);
+		setX(0x0100);
+		stepFrom(0x0008);
+		assertEquals(0x55, getA());
+
+		// Extended: loads from 16-bit address 0x0300.
+		write(0x0300, 0x33);
+		stepFrom(0x000A);
+		assertEquals(0x33, getA());
+	}
+
+	@Test
+	public void LDAB() {
+		assemble(0x0000, "LDAB #0x42");    // Immediate: positive value.
+		assemble(0x0002, "LDAB #0x00");    // Immediate: zero.
+		assemble(0x0004, "LDAB #0x80");    // Immediate: negative (MSB set).
+		assemble(0x0006, "LDAB 0x50");     // Direct: reads from zero-page address.
+		assemble(0x0008, "LDAB 0x10,X");   // Indexed: reads from X + offset.
+		assemble(0x000A, "LDAB 0x0300");   // Extended: reads from 16-bit address.
+
+		// Immediate: positive value — B gets value, N=0, Z=0, V=0.
+		setCC(CC.V | CC.C);
+		stepFrom(0x0000);
+		assertEquals(0x42, getB());
+		assertEquals(CC.C, getCC());      // V cleared, C unaffected.
+
+		// Immediate: zero — Z set, N=0, V=0.
+		setCC(CC.V | CC.C);
+		stepFrom(0x0002);
+		assertEquals(0x00, getB());
+		assertEquals(CC.Z | CC.C, getCC());
+
+		// Immediate: negative — N set, Z=0, V=0.
+		setCC(CC.V | CC.C);
+		stepFrom(0x0004);
+		assertEquals(0x80, getB());
+		assertEquals(CC.N | CC.C, getCC());
+
+		// Direct: loads from zero-page address 0x50.
+		write(0x0050, 0x77);
+		stepFrom(0x0006);
+		assertEquals(0x77, getB());
+
+		// Indexed: loads from X + 0x10.
+		write(0x0110, 0x55);
+		setX(0x0100);
+		stepFrom(0x0008);
+		assertEquals(0x55, getB());
+
+		// Extended: loads from 16-bit address 0x0300.
+		write(0x0300, 0x33);
+		stepFrom(0x000A);
+		assertEquals(0x33, getB());
+	}
 }
