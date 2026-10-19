@@ -152,6 +152,19 @@ public class EmulatorMC6800Test extends AbstractEmulatorTest {
 	}
 
 	@Test
+	public void JSR_EAX() {
+		// This is an indirect test of the Push2 macro in the language spec.
+		assemble(0x0200,
+			"JSR 0x23, X");
+
+		setS(0x07FF);
+		setX(0x0300);
+		stepFrom(0x0200, 1);
+		assertEquals(0x0323, getPC());
+		assertEquals(0x07FD, getS());
+	}
+
+	@Test
 	public void BRA() {
 		assemble(0x0100, "BRA 0x0130");
 
