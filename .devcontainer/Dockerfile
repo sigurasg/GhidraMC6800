@@ -18,9 +18,9 @@ ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-ENV VERSION=12.0.1_PUBLIC
-ENV GHIDRA_SHA=85bd2990945f3a78df4d1e09f1bb1f40ab77be3bac62c6e7678900788c7f0f41
-ENV GHIDRA_URL=https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_12.0.1_build/ghidra_12.0.1_PUBLIC_20260114.zip
+ENV VERSION=12.2_PUBLIC
+ENV GHIDRA_SHA=2c2cd776db3c1f6a097ba418922378ac3649cadd5e844a6f5f088ae628a7be67
+ENV GHIDRA_URL=https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_12.2_build/ghidra_12.2_PUBLIC_20261016.zip
 
 
 RUN \
@@ -32,8 +32,8 @@ RUN \
     apt install -y \
             git \
             ssh \
-            openjdk-21-jdk \
-            openjdk-21-dbg \
+            openjdk-25-jdk \
+            openjdk-25-dbg \
             wget \
             unzip \
             less \

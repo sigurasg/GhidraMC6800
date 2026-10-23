@@ -10,7 +10,7 @@
 		"vscode": {
 			// Set *default* container specific settings.json values on container create.
 			"settings": {
-				"java.import.gradle.java.home": "/usr/lib/jvm/java-21-openjdk-amd64/"
+				"java.import.gradle.java.home": "/usr/lib/jvm/java-25-openjdk-amd64/"
 			},
 			"extensions": ["vscjava.vscode-java-pack"]
 		}

@@ -14,6 +14,8 @@
 
 package is.sort.mc6800;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ import ghidra.program.database.ProgramDB;
 import ghidra.program.model.address.Address;
 import ghidra.program.model.lang.Language;
 import ghidra.program.model.lang.LanguageID;
+import ghidra.program.model.lang.LanguageNotFoundException;
 import utility.application.ApplicationLayout;
 
 public abstract class AbstractIntegrationTest extends AbstractGenericTest {
@@ -40,12 +43,22 @@ public abstract class AbstractIntegrationTest extends AbstractGenericTest {
 
 	public AbstractIntegrationTest(String lang) {
 		SleighLanguageProvider provider = SleighLanguageProvider.getSleighLanguageProvider();
-		this.language = provider.getLanguage(new LanguageID(lang));
+
+		Language language = null;
+		try {
+			language = provider.getLanguage(new LanguageID(lang));
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		this.language = language;
+
 		ProgramDB program = null;
 		try {
 			program = new ProgramDB("test", language, language.getDefaultCompilerSpec(), this);
 		}
 		catch (IOException e) {
+			fail(e.getMessage());
 		}
 		this.program = program;
 	}
