@@ -20,7 +20,7 @@ jobs:
           java-version: '25'
           cache: 'gradle'
       - name: Install Ghidra ${{ matrix.ghidra }}
-        uses: antoniovazquezblanco/setup-ghidra@v2.0.19
+        uses: antoniovazquezblanco/setup-ghidra@v2.2.1
         with:
           auth_token: ${{ secrets.GITHUB_TOKEN }}
           version: ${{ matrix.ghidra }}
