@@ -48,7 +48,7 @@ public abstract class AbstractIntegrationTest extends AbstractGenericTest {
 		try {
 			language = provider.getLanguage(new LanguageID(lang));
 		}
-		catch (LanguageNotFoundException e) {
+		catch (Exception e) {
 			fail(e.getMessage());
 		}
 		this.language = language;
